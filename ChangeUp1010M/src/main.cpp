@@ -10,24 +10,28 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         1               
+// LeftMotorF           motor         5               
 // LeftMotorB           motor         2               
 // RightMotorF          motor         3               
 // RightMotorB          motor         4               
 // Controller1          controller                    
-// Intake               motor         5               
-// Elevator             motor         6               
+// IntakeR              motor         21              
+// Elevator             motor         1               
+// Elevator2            motor         6               
+// IntakeL              motor         7               
 // ---- END VEXCODE CONFIGURED DEVICES ----
-
+#include <iostream>
 #include "autonomousFunctions.h"
 #include "vex.h"
-
+#include "gifclass.h"
 void resetEncoders();
 using namespace vex;
 bool resetEncoder = false;
 bool runPid =true;
-bool intake = false;
+bool intake = true;
+int intakeSpeed = 0;
 int ktarget = 0;
+int count =0;
 int turntarget = 0;
 int kturntarget = 0;
 
@@ -55,11 +59,12 @@ int pidTestForward() {
 
 int target = ktarget;
 int previousError = 0;
+
 int totalError = 0;
 int ttarget = turntarget;
 int tpreviousError = 0;
 int ttotalError = 0;
-
+int kintakespeed= intakeSpeed;
 /*
 Tune kP until steady minor oscillation
 Tune kD increase until oscillation doesn't exist
@@ -84,35 +89,47 @@ double tkD = 0.01;
    // ttotalError += terror; //Integral take it out if not needed
     double turnMotorPower = (terror * tkP + ttotalError * tkI + tderivative * tkD); // Add values up
   //Code for Motor Movements
-  if(intake==true){
-    LeftMotorF.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);//Run the voltage
+
+
+   
+
+   if(intake==true){
+          LeftMotorF.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);//Run the voltage
     LeftMotorB.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);
     RightMotorF.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
-    RightMotorB.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
-    Intake.spin(forward,100,pct);
+   RightMotorB.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
+   if(LateralmotorPower<1.0||turnMotorPower<1.0){
+             Elevator.stop(hold);
+     Elevator2.stop(hold);
+     IntakeL.stop(vex::brakeType::coast);
+     IntakeR.stop(coast);
+   }
+     IntakeL.spin(forward,100,pct);
+     IntakeR.spin(forward,100,pct);
+     Elevator.spin(forward,kintakespeed,pct);
+     Elevator2.spin(forward,kintakespeed,pct);
+   }
+   else if(intake == false){
+         LeftMotorF.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);//Run the voltage
+    LeftMotorB.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);
+    RightMotorF.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
+   RightMotorB.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
+        Elevator.stop(hold);
+     Elevator2.stop(brakeType::hold);
+     IntakeL.stop(vex::brakeType::coast);
+     IntakeR.stop(coast);
+   }
     previousError = error;
     tpreviousError = terror;
         Brain.Screen.setCursor(2,0);
         Brain.Screen.printAt(1, 20, "Turning Power %f",turnMotorPower);
         Brain.Screen.printAt(1, 40, "Lateral Power%f",LateralmotorPower);
         Brain.Screen.printAt(1,60,"Turning Distance Remaining%f",terror);
+        
 
     task::sleep(20);
-  }
-  else if(intake==false){
-    LeftMotorF.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);//Run the voltage
-    LeftMotorB.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);
-    RightMotorF.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
-    RightMotorB.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
-    previousError = error;
-    tpreviousError = terror;
-        Brain.Screen.setCursor(2,0);
-        Brain.Screen.printAt(1, 20, "Turning Power %f",turnMotorPower);
-        Brain.Screen.printAt(1, 40, "Lateral Power%f",LateralmotorPower);
-        Brain.Screen.printAt(1,60,"Turning Distance Remaining%f",terror);
+  
 
-    task::sleep(20);
-  }
   }
   return 1;
 }
@@ -140,22 +157,41 @@ void resetTarget(){
 }
 void autonomous(void) {
   vex::task something(pidTestForward);
-  resetEncoder = true;
+
   intake = true;
-  turntarget = 1000;
-  task::sleep(2000);
+  intakeSpeed = 100; //in percentage
+  turntarget = 0;
+  ktarget = 1000;
+  task::sleep(1300);
   
   resetEncoder = true;
   intake = false;
-  ktarget = 1000;
-
+  intakeSpeed = 0;
+  ktarget =0;
+  turntarget = 500;
+  task::sleep(1000);
 
  
 }
+int rotateImages(){
+  while(true){
+    Brain.Screen.clearScreen();
+    Brain.Screen.drawImageFromFile( "linus.png", 0, 0 );
+    task::sleep(10);
+    Brain.Screen.clearScreen();
+    Brain.Screen.drawImageFromFile( "1010.png", 0, 0 );
+    task::sleep(3);
+  }
+  return 0;
+}
 
 void usercontrol(void) {
+
+  vex::task slideshow(rotateImages);
+
   int deadband = 5;
   while (1) {
+    Brain.Screen.render();
     vexcodeInit();
     int leftMotorSpeed =
         Controller1.Axis3.position() + Controller1.Axis1.position();
@@ -163,6 +199,7 @@ void usercontrol(void) {
         Controller1.Axis3.position() - Controller1.Axis1.position();
 
     if (abs(leftMotorSpeed) < deadband) {
+     
       LeftMotorF.setVelocity(0, pct);
       LeftMotorB.setVelocity(0, pct);
     } else {
@@ -182,39 +219,47 @@ void usercontrol(void) {
     LeftMotorB.spin(fwd);
     RightMotorF.spin(fwd);
     RightMotorB.spin(fwd);
-    if(Controller1.ButtonR1.pressing()){
-      Intake.spin(fwd,100,pct);
-
-    }
-
-    else if(Controller1.ButtonR2.pressing()){
-    Intake.spin(reverse,100,pct);
-    
-    }
-    else{
-      Intake.stop(coast);
-    }
     if(Controller1.ButtonL1.pressing()){
       Elevator.spin(forward,100,pct);
+      Elevator2.spin(forward,100,pct);
+      
+     
     }
     else if(Controller1.ButtonL2.pressing()){
       Elevator.spin(reverse,100,pct);
+      Elevator2.spin(reverse,100,pct);
+      
+      
+    }
+        else if(Controller1.ButtonA.pressing()){
+      Elevator.spin(forward,100,pct);
+      Elevator2.spin(reverse,100,pct);
+      
+      
     }
     else{
-      Elevator.stop();
+      Elevator.stop(brakeType::hold);
+      Elevator2.stop(brakeType::hold);
     }
-        Brain.Screen.printAt(1, 20, "Left Front Temp %f pct",LeftMotorF.temperature(pct));
-        Brain.Screen.printAt(1, 40, "Left Back Temp %f pct",LeftMotorB.temperature(percent));
-        Brain.Screen.printAt(1,60,"Right Front Temp %f pct",RightMotorF.temperature(percent));
-         Brain.Screen.printAt(1,80,"Right Back Temp %f pct",RightMotorB.temperature(percent));
-        Brain.Screen.printAt(1,100,"50 percent or above is BAD");
+    if(Controller1.ButtonR1.pressing()){
+      IntakeL.spin(fwd,100,pct);
+      IntakeR.spin(fwd,100,pct);
+    }
+    else if(Controller1.ButtonR2.pressing()){
+            IntakeL.spin(reverse,100,pct);
+      IntakeR.spin(reverse,100,pct);
+    }
+    else{
+      IntakeL.stop();
+      IntakeR.stop();
+    }
+   
   }
 
   
 }
 
 int main() {
-  // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 

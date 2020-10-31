@@ -8,8 +8,10 @@ extern motor LeftMotorB;
 extern motor RightMotorF;
 extern motor RightMotorB;
 extern controller Controller1;
-extern motor Intake;
+extern motor IntakeR;
 extern motor Elevator;
+extern motor Elevator2;
+extern motor IntakeL;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
