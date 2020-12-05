@@ -203,6 +203,10 @@ vex::task slideshow(rotateImages);
       Elevator.spin(fwd,100,pct);
       Elevator2.spin(fwd,100,pct);
     }
+        else if(Controller1.ButtonA.pressing()){
+      Elevator.spin(fwd,75,pct);
+      Elevator2.spin(reverse,75,pct);
+    }
     else{
       Elevator.stop();
       Elevator2.stop();
@@ -218,10 +222,7 @@ vex::task slideshow(rotateImages);
       IntakeR.spin(reverse,100,pct);
 
     }
-    else if(Controller1.ButtonA.pressing()){
-      Elevator.spin(fwd,75,pct);
-      Elevator2.spin(reverse,75,pct);
-    }
+
   else{
     IntakeL.stop();
     IntakeR.stop();
