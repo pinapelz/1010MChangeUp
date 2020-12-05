@@ -94,10 +94,10 @@ double tkD = 0.01;
    
 
    if(intake==true){
-          LeftMotorF.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);//Run the voltage
+    LeftMotorF.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);//Run the voltage
     LeftMotorB.spin(directionType::fwd, LateralmotorPower+turnMotorPower, voltageUnits::volt);
     RightMotorF.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
-   RightMotorB.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
+    RightMotorB.spin(directionType::fwd, LateralmotorPower-turnMotorPower, voltageUnits::volt);
    if(LateralmotorPower<1.0||turnMotorPower<1.0){
              Elevator.stop(hold);
      Elevator2.stop(hold);
