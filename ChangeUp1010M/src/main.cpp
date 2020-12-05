@@ -194,20 +194,29 @@ vex::task slideshow(rotateImages);
       driveMultiplier = 0.5;
     }
     
-
-
-    if(Controller1.ButtonL1.pressing()){
-      IntakeL.spin(fwd,100,pct);
-      IntakeR.spin(fwd,100,pct);
+//l1 score
+    if(Controller1.ButtonR1.pressing()){
+    Elevator.spin(reverse,100,pct);
+      Elevator2.spin(reverse,100,pct);
+    }
+    else if(Controller1.ButtonR2.pressing()){
       Elevator.spin(fwd,100,pct);
       Elevator2.spin(fwd,100,pct);
     }
+    else{
+      Elevator.stop();
+      Elevator2.stop();
+    }
+    if(Controller1.ButtonL2.pressing()){
+      IntakeL.spin(fwd,100,pct);
+      IntakeR.spin(fwd,100,pct);
+
+    }
  
-    else if(Controller1.ButtonL2.pressing()){
+    else if(Controller1.ButtonL1.pressing()){
       IntakeL.spin(reverse,100,pct);
       IntakeR.spin(reverse,100,pct);
-      Elevator.spin(reverse,100,pct);
-      Elevator2.spin(reverse,100,pct);
+
     }
     else if(Controller1.ButtonA.pressing()){
       Elevator.spin(fwd,75,pct);
@@ -216,8 +225,6 @@ vex::task slideshow(rotateImages);
   else{
     IntakeL.stop();
     IntakeR.stop();
-    Elevator.stop();
-    Elevator2.stop();
 
   }
 
