@@ -17,6 +17,7 @@ motor IntakeR = motor(PORT6, ratio18_1, true);
 motor IntakeL = motor(PORT1, ratio18_1, false);
 motor Elevator2 = motor(PORT19, ratio18_1, false);
 motor Elevator = motor(PORT18, ratio18_1, false);
+inertial Inertial17 = inertial(PORT17);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

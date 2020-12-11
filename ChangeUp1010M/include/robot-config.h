@@ -12,6 +12,7 @@ extern motor IntakeR;
 extern motor IntakeL;
 extern motor Elevator2;
 extern motor Elevator;
+extern inertial Inertial17;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

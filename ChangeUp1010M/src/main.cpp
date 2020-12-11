@@ -19,6 +19,7 @@
 // IntakeL              motor         1               
 // Elevator2            motor         19              
 // Elevator             motor         18              
+// Inertial17           inertial      17              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
@@ -26,13 +27,16 @@
 void resetEncoders();
 using namespace vex;
 void driveForward(int speed, int rot, int time);
-void intake(int sec);
+void calibrateInertial();
+void intake(int time,int speed,int rotation);
 bool resetEncoder = false;
 bool runPid = true;
 bool intakeBool = true;
+
 int intakeSpeed = 0;
 int intakeDegrees = 0;
 int ktarget = 0;
+bool usingIntake = false;
 int count = 0;
 int turntarget = 0;
 int kturntarget = 0;
@@ -43,6 +47,7 @@ competition Competition;
 
 void pre_auton(void) {
   vexcodeInit();
+   calibrateInertial();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -76,8 +81,9 @@ void resetTarget() {
   task::sleep(1000);
 }*/
 void autonomous(void){
-  intakeScore(2000);
-  intake(2000);
+
+ 
+  inertialRight(50,180.0);
 }
 int rotateImages() {
   while (true) {
@@ -155,8 +161,8 @@ int speedometer(){
    return 0;
 }
 void usercontrol(void) {
-  //vex::task megaOof(speedometer);
-vex::task slideshow(rotateImages);
+  vex::task megaOof(speedometer);
+//vex::task slideshow(rotateImages);
  vex::task matchtime(matchTimer);
 
   double driveMultiplier = 0.5;
@@ -197,24 +203,37 @@ vex::task slideshow(rotateImages);
     
 //l1 score
     if(Controller1.ButtonR1.pressing()){
-    Elevator.spin(reverse,100,pct);
+    Elevator.spin(reverse,75,pct);
       Elevator2.spin(reverse,100,pct);
+            IntakeL.spin(fwd,100,pct);
+      IntakeR.spin(fwd,100,pct);
     }
     else if(Controller1.ButtonR2.pressing()){
-      Elevator.spin(fwd,100,pct);
+      Elevator.spin(fwd,75,pct);
       Elevator2.spin(fwd,100,pct);
+            IntakeL.spin(fwd,100,pct);
+      IntakeR.spin(fwd,100,pct);
     }
         else if(Controller1.ButtonA.pressing()){
       Elevator.spin(fwd,75,pct);
       Elevator2.spin(reverse,75,pct);
     }
+    else if(Controller1.ButtonX.pressing()){
+          Elevator.spin(fwd,75,pct);
+    }
+      else if(Controller1.ButtonB.pressing()){
+          Elevator.spin(reverse,75,pct);
+      }
     else{
       Elevator.stop();
       Elevator2.stop();
+
+
     }
     if(Controller1.ButtonL2.pressing()){
       IntakeL.spin(fwd,100,pct);
       IntakeR.spin(fwd,100,pct);
+      
 
     }
  
@@ -224,7 +243,8 @@ vex::task slideshow(rotateImages);
 
     }
 
-  else{
+
+  else if(!Controller1.ButtonL1.pressing()||!Controller1.ButtonL2.pressing()||!Controller1.ButtonR2.pressing()){
     IntakeL.stop();
     IntakeR.stop();
 
@@ -237,6 +257,7 @@ vex::task slideshow(rotateImages);
 
   }
 }
+
 
 int main() {
   Competition.autonomous(autonomous);

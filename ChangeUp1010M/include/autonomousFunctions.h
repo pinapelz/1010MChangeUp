@@ -5,7 +5,7 @@
 #include "v5.h"
 #include "v5_vcs.h"
 #include "vex.h"
-
+double offset = 15.4;
 using namespace vex;
 void lockWheels(){
   LeftMotorB.stop(brakeType::hold);
@@ -70,6 +70,33 @@ void intake(int time,int speed, int rotation) {
   vex::task::sleep(time);
   
 }
+void calibrateInertial(){
+    Inertial17.calibrate();
+  while (Inertial17.isCalibrating()) {
+    wait(100, msec);
+  }
+}
+void inertialLeft(int speed, float degree){
+  
+   LeftMotorF.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+   RightMotorF.spin(vex::directionType::fwd,speed, vex::velocityUnits::pct);
+    LeftMotorB.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    RightMotorB.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    waitUntil((Inertial17.rotation(degrees) >= (degree-14.8)));
+    lockWheels();
+    task::sleep(200);
+    
+}
+void inertialRight(int speed, float degree){
+   LeftMotorF.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+   RightMotorF.spin(vex::directionType::rev,speed, vex::velocityUnits::pct);
+    LeftMotorB.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    RightMotorB.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    waitUntil((Inertial17.rotation(degrees) >= (degree-14.8)));
+    lockWheels();
+    task::sleep(200);
+    
+}
 void driveLeft(int speed,int rotation,int time) { // Turn left using motor degrees
 
   LeftMotorF.setVelocity(speed, velocityUnits::pct);
@@ -84,12 +111,7 @@ void driveLeft(int speed,int rotation,int time) { // Turn left using motor degre
  vex::task::sleep(time);
 }
 
-void intake(int time) { // Spin the intake for x amount of time and at y speed
-  IntakeR.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
-  IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
-  vex::task::sleep(time);
 
-}
 
 void intakeScore(int time){
     IntakeR.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
@@ -115,6 +137,7 @@ void TimeIntake(int sec){
   IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); // Intake
   vex::task::sleep(sec); //2700
 }
+
 
 
 
