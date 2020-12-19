@@ -18,6 +18,12 @@ motor IntakeL = motor(PORT1, ratio18_1, false);
 motor Elevator2 = motor(PORT19, ratio18_1, false);
 motor Elevator = motor(PORT18, ratio18_1, false);
 inertial Inertial17 = inertial(PORT17);
+/*vex-vision-config:begin*/
+signature Vision10__REDBALL = signature (1, 6833, 9485, 8159, -619, 77, -271, 2.5, 0);
+signature Vision10__BLUEBALL = signature (2, -2731, -1927, -2329, 7117, 12463, 9790, 0.7, 0);
+signature Vision10__HUMAN = signature (3, 0, 0, 0, 0, 0, 0, 3, 0);
+vision Vision10 = vision (PORT10, 50, Vision10__REDBALL, Vision10__BLUEBALL, Vision10__HUMAN);
+/*vex-vision-config:end*/
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
