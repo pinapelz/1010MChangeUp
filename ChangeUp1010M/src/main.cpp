@@ -11,28 +11,41 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // LeftMotorF           motor         15              
-// LeftMotorB           motor         3               
+// RightMotorB          motor         3               
 // RightMotorF          motor         12              
-// RightMotorB          motor         5               
+// LeftMotorB           motor         5               
 // Controller1          controller                    
 // IntakeR              motor         6               
 // IntakeL              motor         1               
 // Elevator2            motor         19              
-// Elevator             motor         18              
+// Elevator             motor         20              
 // Inertial17           inertial      17              
 // Vision10             vision        10              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
+#include "ballSorter.h"
 #include <iostream>
 void resetEncoders();
 int rotateImages();
 using namespace vex;
 event checkRed = event();
+void setRed(bool red);
 void hasRedCallback();
 void hasBlueCallback();
-void sortBall();
+void stopAll();
+void intakeScore(int time, int rotation);
+void elevatorScore(int time, int rotation);
+void driveForwardIntake(int speed, int rot,int time); 
+void driveBackward(int speed, int rotation, int time);
+void sortBall(int count);
+void releaseBall(int time, int speed, int rotation);
+void holdBall(int time, int speed, int rotation);
+void inertialRight(int speed, float degree);
+void inertialLeft(int speed, float degree);
 void driveForward(int speed, int rot, int time);
+void timeOuttake(int sec);
+void timeScore(int sec);
 int matchTimer();
 void calibrateInertial();
 void intake(int time, int speed, int rotation);
@@ -53,7 +66,7 @@ competition Competition;
 
 void pre_auton(void) {
   vexcodeInit();
-  calibrateInertial();
+
 }
 
 
@@ -65,28 +78,44 @@ void pre_auton(void) {
 /*  a VEX Competition.                                                       */
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*///
+//left negative
+//right positive
 void resetTarget() {
   ktarget = 0;
   turntarget = 0;
 }
 void autonomous(void) {
-   inertialRight(50, 180.0); 
+ vex::task megaOof(speedometer);
+    //driveForward(50,200,300);
+   // stopAll();
+    //timeScore(500);
+    calibrateInertial();
+   // setRed(false);
+     //sortBallSkillsAuto();
+    //timeOuttake(500);
+     //stopAll();
+     
+    driveForward(50,500,3000);
+     inertialRight(75,Inertial17.rotation(degrees)+136);
+ 
+    //timeScore()
+ 
+
+      
    }
 
 
 
 void usercontrol(void) {
- // vex::task megaOof(speedometer);
-
+  vex::task megaOof(speedometer);
   // vex::task slideshow(rotateImages);
   vex::task matchtime(matchTimer);
 
-  double driveMultiplier = 0.5;
+  double driveMultiplier = 0.75;
   int deadband = 5;
   
   while (1) {
-
     int leftMotorSpeed =
         (Controller1.Axis3.position() + Controller1.Axis1.position()) *
         driveMultiplier;
@@ -113,6 +142,8 @@ void usercontrol(void) {
     LeftMotorB.spin(fwd);
     RightMotorF.spin(fwd);
     RightMotorB.spin(fwd);
+
+  
     if (Controller1.ButtonUp.pressing()) {
       driveMultiplier = 1.0;
 
@@ -120,7 +151,16 @@ void usercontrol(void) {
       driveMultiplier = 0.5;
     }
     else if(Controller1.ButtonY.pressing()){
-      sortBall();
+      sortBall(1);
+    }
+    else if(Controller1.ButtonRight.pressing()){
+      sortBall(2);
+    }
+        else if(Controller1.ButtonLeft.pressing()){
+      sortBall(3);
+    }
+            else if(Controller1.ButtonX.pressing()){
+      sortBall(4);
     }
     if (Controller1.ButtonR1.pressing()) {
       Elevator.spin(reverse, 100, pct);
@@ -130,8 +170,7 @@ void usercontrol(void) {
     } else if (Controller1.ButtonR2.pressing()) {
       Elevator.spin(fwd, 100, pct);
       Elevator2.spin(fwd, 100, pct);
-      IntakeL.spin(fwd, 100, pct);
-      IntakeR.spin(fwd, 100, pct);
+
     } else if (Controller1.ButtonA.pressing()) {
       Elevator.spin(fwd, 100, pct);
       Elevator2.spin(reverse, 100, pct);
