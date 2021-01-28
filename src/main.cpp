@@ -30,13 +30,9 @@ void resetEncoders();
 int rotateImages();
 using namespace vex;
 event checkRed = event();
-void elevatorScoreTwo(int rot, int time);
 void setRed(bool red);
-void scoreTop(int time);
 void hasRedCallback();
-void ballLocated();
 void hasBlueCallback();
-int expDrive(int joyVal ,float driveExp ,int joyDead, int motorMin);
 void stopAll();
 void intakeScore(int time, int rotation);
 void elevatorScore(int time, int rotation);
@@ -46,8 +42,8 @@ void sortBall(int count);
 void releaseBall(int time, int speed, int rotation);
 void holdBall(int time, int speed, int rotation);
 void inertialRight(int speed, float degree);
-void driveForward(int speed, int rot, int time);
 void inertialLeft(int speed, float degree);
+void driveForward(int speed, int rot, int time);
 void timeOuttake(int sec);
 void timeScore(int sec);
 int matchTimer();
@@ -85,30 +81,30 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*///
 //left negative
 //right positive
-
-double convertDistance(double distance){
-return distance*11.1;
-}
 void resetTarget() {
   ktarget = 0;
   turntarget = 0;
 }
 void autonomous(void) {
-vex::task megaOof(speedometer);
-   //calibrateInertial();
-  //100 deg  = 9 cm
-
-elevatorScoreTwo(1300,1300);
-ballLocated();
-
-    /*driveForwardIntake(75,convertDistance(60),750);
-    scoreTop(1000);
-    sortBall(3);*/
-
+ vex::task megaOof(speedometer);
+    //driveForward(50,200,300);
+   // stopAll();
+    //timeScore(500);
+    calibrateInertial();
+   // setRed(false);
+     //sortBallSkillsAuto();
+    //timeOuttake(500);
+     //stopAll();
+     
+    driveForward(50,500,3000);
+     inertialRight(75,Inertial17.rotation(degrees)+136);
+ 
+    //timeScore()
  
 
       
    }
+
 
 
 void usercontrol(void) {
@@ -118,9 +114,8 @@ void usercontrol(void) {
 
   double driveMultiplier = 0.75;
   int deadband = 5;
-  bool exponential = true;
+  
   while (1) {
-    if(!exponential){
     int leftMotorSpeed =
         (Controller1.Axis3.position() + Controller1.Axis1.position()) *
         driveMultiplier;
@@ -148,24 +143,7 @@ void usercontrol(void) {
     RightMotorF.spin(fwd);
     RightMotorB.spin(fwd);
 
-    }
-    else{
-      int joyDead = 5;
-      int motorMin = 15;
-      float driveExp = 1.4;
-        LeftMotorF.spin(fwd,expDrive(Controller1.Axis3.position() + Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-        
-        LeftMotorB.spin(fwd,expDrive(Controller1.Axis3.position() + Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-
-        RightMotorF.spin(fwd,expDrive(Controller1.Axis3.position() - Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-
-        RightMotorB.spin(fwd,expDrive(Controller1.Axis3.position() - Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-
-    }
+  
     if (Controller1.ButtonUp.pressing()) {
       driveMultiplier = 1.0;
 

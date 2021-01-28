@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 bool seenRed = false;
-bool seenBallRed = false;
 int ballsProcessed = 0;
 void stopAll(){
     IntakeR.stop();
@@ -36,7 +35,45 @@ void elevatorScore(int time, int revolution){
   Elevator2.stop(brake);
 
 }
+void hasBlueCallbackSkillsAuto() {
+  Vision10.takeSnapshot(Vision10__BLUEBALL);
+  if (Vision10.objectCount > 0) {
+    while (Vision10.objectCount > 0) {
+      Vision10.takeSnapshot(Vision10__BLUEBALL);
+      IntakeL.stop();
+      IntakeR.stop();
+      Elevator.spin(fwd, 75, pct);
+      Elevator2.spin(reverse, 100, pct);
+      if (Controller1.ButtonL2.pressing()) {
+        IntakeL.spin(fwd, 100, pct);
+        IntakeR.spin(fwd, 100, pct);
+      }
 
+    }
+
+  }
+
+  Vision10.takeSnapshot(Vision10__REDBALL);
+
+  if (Vision10.objectCount > 0) {
+    Controller1.rumble("...");
+    while (Vision10.objectCount > 0) {
+      Vision10.takeSnapshot(Vision10__REDBALL);
+        IntakeL.spin(fwd, 100, pct);
+        IntakeR.spin(fwd, 100, pct);
+        task::sleep(300);
+      IntakeL.stop();
+      IntakeR.stop();
+      Elevator.spin(forward, 75, pct);
+      Elevator2.spin(fwd, 100, pct);
+
+    }
+    seenRed = true;
+
+  }
+
+
+}
 
 
 
@@ -115,7 +152,7 @@ bool stopNow = false;
   if (Vision10.objectCount > 0) {
       IntakeL.stop();
       IntakeR.stop();
-      releaseBall(500,3);
+      releaseBall(1000,3);
       ballsProcessed++;
     Elevator2.stop();
   }
@@ -125,30 +162,19 @@ bool stopNow = false;
   if (Vision10.objectCount > 0) {
           IntakeL.stop();
       IntakeR.stop();
-      elevatorScore(800,5);
+      elevatorScore(1300,5);
       ballsProcessed++;
   }
-
-  IntakeL.spin(fwd, 100, pct);
-  IntakeR.spin(fwd, 100, pct);
- // Elevator.spin(fwd,75,pct);
-  Elevator2.stop();
-
-}
-void seenRedBall(){
-  while(true){
-  Vision10.takeSnapshot(Vision10__REDBALL);
-  if (Vision10.objectCount > 0) {
-    Controller1.rumble(rumbleLong);
-    seenBallRed = true;
-    break;
+  if(Controller1.ButtonB.pressing()){
+    return;
   }
   IntakeL.spin(fwd, 100, pct);
   IntakeR.spin(fwd, 100, pct);
- // Elevator.spin(fwd,75,pct);
+    Elevator.spin(fwd,100,pct);
   Elevator2.stop();
-  }
+
 }
+
 
 
 
@@ -209,14 +235,33 @@ void hasRedCallback() {
   }
 
 
+void sortBallSkillsAuto(){
+    event checkBlue = event();
+  event checkRed = event();
+  checkBlue(hasBlueCallbackSkillsAuto);
+  checkRed(hasRedCallback);
 
-void ballLocated(){
-  seenBallRed = false;
-event redFind= event();
-redFind(seenRedBall);
-while(seenBallRed == false){
-redFind.broadcastAndWait();
+  while (!seenRed) {
+    checkBlue.broadcastAndWait();
+  }
+  IntakeR.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); 
+  IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
+  Elevator.spin(reverse, 100, pct);
+  Elevator2.spin(reverse, 100, pct);
+  vex::task::sleep(800);   
+  stopAll();
 }
+
+void sortBallAuto(){
+    event checkBlue = event();
+  event checkRed = event();
+  checkBlue(hasBlueCallbackSkillsAuto);
+  checkRed(hasRedCallback);
+
+  while (!seenRed) {
+    checkBlue.broadcastAndWait();
+  }
+  stopAll();
 }
 void sortBall(int process) {
   ballsProcessed = 0;
@@ -224,11 +269,7 @@ void sortBall(int process) {
   event checkRed = event();
   checkBlue(hasBlueCallback);
   checkRed(hasRedCallback);
-  while (process!=ballsProcessed) {
-    if(ballsProcessed==10){
-      stopAll();
-      break;
-    }
+  while (process!=ballsProcessed||!Controller1.ButtonB.pressing()) {
     checkBlue.broadcastAndWait();
   }
 }
