@@ -7,6 +7,10 @@
 
 #include <string.h>
 double offset = 15.4;
+int ktarget = 0;
+int turntarget = 0;
+int kintakespeed = 100;
+bool resetEncoders = false;
 using namespace vex;
 
 void lockWheels() {
@@ -304,4 +308,96 @@ void resetEncoders() {
   LeftMotorB.resetPosition();
   RightMotorF.resetPosition();
   RightMotorB.resetPosition();
+}
+
+int pidLoop() {
+  while (runPid) {
+    if (resetEncoders) {
+      resetEncoders = false;
+      intakeBool = false;
+      resetEncoders();
+    }
+
+    int target = ktarget;
+    int previousError = 0;
+    int totalError = 0;
+    int ttarget = turntarget;
+    int tpreviousError = 0;
+    int ttotalError = 0;
+    int kintakespeed = intakeSpeed;
+    /*
+    Tune kP until steady minor oscillation
+    Tune kD increase until oscillation doesn't exist
+    Tune kI to increase position
+    */
+    double kP = 0.2; 
+    double kI = 0;   // minor change
+    double kD = 0.1; // speed changes
+    double tkP = 0.13;
+    double tkI = 0;
+    double tkD = 0.01;
+    int encoderAverage = (LeftMotorF.position(deg) + RightMotorF.position(deg))/2;
+    int error = target - encoderAverage;
+    int derivative = error - previousError;
+    double LateralmotorPower = (error * kP + totalError * kI + derivative * kD); 
+    int turnDifference = LeftMotorF.position(deg) - RightMotorF.position(deg); 
+    int terror = ttarget - turnDifference;
+    int tderivative = terror - tpreviousError;
+    double turnMotorPower = (terror * tkP + ttotalError * tkI + tderivative * tkD); 
+    if (intakeBool == true) {
+      LeftMotorF.spin(directionType::fwd, LateralmotorPower + turnMotorPower, voltageUnits::volt); 
+      LeftMotorB.spin(directionType::fwd, LateralmotorPower + turnMotorPower, voltageUnits::volt);
+      RightMotorF.spin(directionType::fwd, LateralmotorPower - turnMotorPower,voltageUnits::volt);
+      RightMotorB.spin(directionType::fwd, LateralmotorPower - turnMotorPower,voltageUnits::volt);
+      if (LateralmotorPower < 1.0 || turnMotorPower < 1.0) {
+        Elevator.stop(hold);
+        Elevator2.stop(hold);
+        IntakeL.stop(vex::brakeType::coast);
+        IntakeR.stop(coast);
+      }
+      IntakeL.spin(forward, 100, pct);
+      IntakeR.spin(forward, 100, pct);
+      Elevator.spin(forward, kintakespeed, pct);
+      Elevator2.spin(forward, kintakespeed, pct);
+    } else if (intakeBool == false) {
+      LeftMotorF.spin(directionType::fwd, LateralmotorPower + turnMotorPower, voltageUnits::volt);
+      LeftMotorB.spin(directionType::fwd, LateralmotorPower + turnMotorPower, voltageUnits::volt);
+      RightMotorF.spin(directionType::fwd, LateralmotorPower - turnMotorPower, voltageUnits::volt);
+      RightMotorB.spin(directionType::fwd, LateralmotorPower - turnMotorPower, voltageUnits::volt);
+      Elevator.stop(hold);
+      Elevator2.stop(brakeType::hold);
+      IntakeL.stop(vex::brakeType::coast);
+      IntakeR.stop(coast);
+    }
+    previousError = error;
+    tpreviousError = terror;
+    task::sleep(20);
+  }
+  return 1;
+}
+double convertDistance(double distance){
+return distance*11.1;
+}
+void redAuton(){
+  //100 deg  = 9 cm
+
+elevatorScoreTwo(1300,1300); //Preset for bringing the ball up to the top but not scoring
+ballLocated();//Get ball to the intakes
+scoreTop(300);
+ballLocated();
+elevatorScoreTwo(1300,1300);
+
+    /*driveForwardIntake(75,convertDistance(60),750);
+    scoreTop(1000);
+    sortBall(3);*/
+
+}
+
+void pidTest(){
+vex::task pidMovement(pidLoop);
+resetEncoders = true;
+ktarget = 1000;
+turntarget = 0;
+vex::task::sleep(2000);
+
 }

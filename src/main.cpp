@@ -46,11 +46,13 @@ void sortBall(int count);
 void releaseBall(int time, int speed, int rotation);
 void holdBall(int time, int speed, int rotation);
 void inertialRight(int speed, float degree);
+void redAuton();
 void driveForward(int speed, int rot, int time);
 void inertialLeft(int speed, float degree);
 void timeOuttake(int sec);
 void timeScore(int sec);
 int matchTimer();
+void pidTest();
 void calibrateInertial();
 void intake(int time, int speed, int rotation);
 bool resetEncoder = false;
@@ -66,36 +68,25 @@ int turntarget = 0;
 int kturntarget = 0;
 competition Competition;
 
+
+
+
+
+
+
 void pre_auton(void) {
   vexcodeInit();
 }
 
-double convertDistance(double distance){
-return distance*11.1;
-}
+
 void resetTarget() {
   ktarget = 0;
   turntarget = 0;
 }
 void autonomous(void) {
 vex::task megaOof(speedometer);
-  //100 deg  = 9 cm
-
-elevatorScoreTwo(1300,1300); //Preset for bringing the ball up to the top but not scoring
-ballLocated();//Get ball to the intakes
-scoreTop(300);
-ballLocated();
-elevatorScoreTwo(1300,1300);
-
-    /*driveForwardIntake(75,convertDistance(60),750);
-    scoreTop(1000);
-    sortBall(3);*/
-
- 
-
       
-   }
-
+}
 
 void usercontrol(void) {
   vex::task megaOof(speedometer);
