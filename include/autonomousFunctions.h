@@ -21,10 +21,10 @@ void lockWheels() {
 }
 int expDrive(int joystickValue){
   int output = 0;
-    if(abs(joystickValue) > JOYSTICK_DEADZONE){
-      int direction = abs(joystickValue) / joystickValue;
-      output = (int) (direction * (1.2 * pow(1.0356, abs(joystickValue)) - 1.2 + 0.2 * abs(joystickValue)));
-      }
+  if(abs(joystickValue) > JOYSTICK_DEADZONE){
+    int direction = abs(joystickValue) / joystickValue;
+    output = (int) (direction * (1.2 * pow(1.0356, abs(joystickValue)) - 1.2 + 0.2 * abs(joystickValue)));
+  }
   return output;
 }
 int matchTimer() {
@@ -47,33 +47,33 @@ int matchTimer() {
     vex::task::sleep(1000);
     timeRemaining--;
     switch (timeRemaining) {
-    case 60:
+      case 60:
       Controller1.rumble("-");
       Controller1.Screen.setCursor(6, 0);
       Controller1.Screen.print("60 Seconds Remain");
       break;
-    case 30:
+      case 30:
       Controller1.rumble("--");
       break;
-    case 15:
+      case 15:
       Controller1.rumble("..");
       break;
-    case 5:
+      case 5:
       Controller1.rumble(".");
       break;
-    case 4:
+      case 4:
       Controller1.rumble(".");
       break;
-    case 3:
+      case 3:
       Controller1.rumble(".");
       break;
-    case 2:
+      case 2:
       Controller1.rumble(".");
       break;
-    case 1:
+      case 1:
       Controller1.rumble(".");
       break;
-    default:
+      default:
       break;
     }
   }
@@ -118,8 +118,8 @@ void driveForward(int speed, int rot, int time) { // Drive forward function that
 //Elevator.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
   
   vex::task::sleep(time);
-    lockWheels();
-        IntakeR.stop();
+  lockWheels();
+  IntakeR.stop();
   IntakeL.stop();
   Elevator.stop();
   Elevator2.stop();
@@ -140,14 +140,14 @@ void driveForwardIntake(int speed, int rot, int time) { // Drive forward functio
 //Elevator.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
   
   vex::task::sleep(time);
-    lockWheels();
+  lockWheels();
   IntakeR.stop();
   IntakeL.stop();
   Elevator.stop();
   Elevator2.stop();
 }
 void driveBackward(
-    int speed, int rotation,
+  int speed, int rotation,
     int time) { // Drive backward function that uses motor revrees
   LeftMotorF.setVelocity(speed, velocityUnits::pct);
   LeftMotorB.setVelocity(speed, velocityUnits::pct);
@@ -191,10 +191,10 @@ void calibrateInertial() {
 }
 void inertialLeft(int speed, float revreee) {
   while(Inertial17.heading(degrees) >= (revreee - 14.8)){
-  LeftMotorF.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
-  RightMotorF.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
-  LeftMotorB.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
-  RightMotorB.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    LeftMotorF.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    RightMotorF.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    LeftMotorB.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    RightMotorB.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
   }
   
 
@@ -243,10 +243,10 @@ void intakeScore(int time, int rotation) {
 }
 
 void releaseBall(int speed, int rotation, int time){
-      IntakeL.setVelocity(127, pct);
-    IntakeR.setVelocity(127, pct);
-    Elevator.setVelocity(127, pct);
-    Elevator2.setVelocity(-127, pct);
+  IntakeL.setVelocity(127, pct);
+  IntakeR.setVelocity(127, pct);
+  Elevator.setVelocity(127, pct);
+  Elevator2.setVelocity(-127, pct);
   IntakeL.rotateFor(rotation, rotationUnits::deg, false);
   IntakeR.rotateFor(rotation, rotationUnits::deg, false);
   Elevator.rotateFor(-rotation, rotationUnits::deg, false);
@@ -258,9 +258,9 @@ void releaseBall(int speed, int rotation, int time){
   Elevator2.stop();
 }
 void holdBall(int speed, int rotation, int time){
-      IntakeL.setVelocity(127, pct);
-    IntakeR.setVelocity(127, pct);
-    Elevator.setVelocity(127, pct);
+  IntakeL.setVelocity(127, pct);
+  IntakeR.setVelocity(127, pct);
+  Elevator.setVelocity(127, pct);
   IntakeL.rotateFor(rotation, rotationUnits::deg, false);
   IntakeR.rotateFor(rotation, rotationUnits::deg, false);
   Elevator.rotateFor(-rotation, rotationUnits::deg, false);
@@ -272,8 +272,8 @@ void holdBall(int speed, int rotation, int time){
 }
 
 void elevatorScoreTwo(int rotation, int time){
-      Elevator.setVelocity(75, pct);
-    Elevator2.setVelocity(75, pct);
+  Elevator.setVelocity(75, pct);
+  Elevator2.setVelocity(75, pct);
   Elevator.rotateFor(rotation, rotationUnits::deg, false);
   Elevator2.rotateFor(rotation, rotationUnits::deg, false);
   task::sleep(time);
@@ -376,8 +376,9 @@ int pidLoop() {
   return 1;
 }
 double convertDistance(double distance){
-return distance*11.1;
+  return distance*11.1;
 }
+
 void redAuton(){
   //100 deg  = 9 cm
 
@@ -394,10 +395,10 @@ elevatorScoreTwo(1300,1300);
 }
 
 void pidTest(){
-vex::task pidMovement(pidLoop);
-resetEncoders = true;
-ktarget = 1000;
-turntarget = 0;
-vex::task::sleep(2000);
+  vex::task pidMovement(pidLoop);
+  resetEncoders = true;
+  ktarget = 1000;
+  turntarget = 0;
+  vex::task::sleep(2000);
 
 }

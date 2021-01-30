@@ -68,12 +68,6 @@ int turntarget = 0;
 int kturntarget = 0;
 competition Competition;
 
-
-
-
-
-
-
 void pre_auton(void) {
   vexcodeInit();
 }
@@ -84,8 +78,8 @@ void resetTarget() {
   turntarget = 0;
 }
 void autonomous(void) {
-vex::task megaOof(speedometer);
-      
+  vex::task megaOof(speedometer);
+  redAuton();
 }
 
 void usercontrol(void) {
@@ -98,41 +92,41 @@ void usercontrol(void) {
   bool exponential = true;
   while (1) {
     if(!exponential){
-    int leftMotorSpeed =
-        (Controller1.Axis3.position() + Controller1.Axis1.position()) *
-        driveMultiplier;
-    int rightMotorSpeed =
-        (Controller1.Axis3.position() - Controller1.Axis1.position()) *
-        driveMultiplier;
+      int leftMotorSpeed =
+      (Controller1.Axis3.position() + Controller1.Axis1.position()) *
+      driveMultiplier;
+      int rightMotorSpeed =
+      (Controller1.Axis3.position() - Controller1.Axis1.position()) *
+      driveMultiplier;
 
-    if (abs(leftMotorSpeed) < deadband) {
-      LeftMotorF.setVelocity(0, pct);
-      LeftMotorB.setVelocity(0, pct);
-    } else {
-      LeftMotorF.setVelocity(leftMotorSpeed, pct);
-      LeftMotorB.setVelocity(leftMotorSpeed, pct);
-    }
+      if (abs(leftMotorSpeed) < deadband) {
+        LeftMotorF.setVelocity(0, pct);
+        LeftMotorB.setVelocity(0, pct);
+      } else {
+        LeftMotorF.setVelocity(leftMotorSpeed, pct);
+        LeftMotorB.setVelocity(leftMotorSpeed, pct);
+      }
 
-    if (abs(rightMotorSpeed) < deadband) {
-      RightMotorF.setVelocity(0, pct);
-      RightMotorB.setVelocity(0, pct);
-    } else {
-      RightMotorF.setVelocity(rightMotorSpeed, pct);
-      RightMotorB.setVelocity(rightMotorSpeed, pct);
-    }
-    LeftMotorF.spin(fwd);
-    LeftMotorB.spin(fwd);
-    RightMotorF.spin(fwd);
-    RightMotorB.spin(fwd);
+      if (abs(rightMotorSpeed) < deadband) {
+        RightMotorF.setVelocity(0, pct);
+        RightMotorB.setVelocity(0, pct);
+      } else {
+        RightMotorF.setVelocity(rightMotorSpeed, pct);
+        RightMotorB.setVelocity(rightMotorSpeed, pct);
+      }
+      LeftMotorF.spin(fwd);
+      LeftMotorB.spin(fwd);
+      RightMotorF.spin(fwd);
+      RightMotorB.spin(fwd);
 
     }
     else{
-        int leftSpeed = getExpoValue(controllerY+controllerX);
-        int rightSpeed = getExpoValue(controllerY-controllerX);
-        LeftMotorF.spin(fwd,leftSpeed,pct);
-        LeftMotorB.spin(fwd,leftSpeed,pct);
-        RightMotorF.spin(fwd,rightSpeed,pct);
-        RightMotorB.spin(fwd,rightSpeed,pct);
+      int leftSpeed = getExpoValue(controllerY+controllerX);
+      int rightSpeed = getExpoValue(controllerY-controllerX);
+      LeftMotorF.spin(fwd,leftSpeed,pct);
+      LeftMotorB.spin(fwd,leftSpeed,pct);
+      RightMotorF.spin(fwd,rightSpeed,pct);
+      RightMotorB.spin(fwd,rightSpeed,pct);
 
     }
     if (Controller1.ButtonUp.pressing()) {
@@ -147,10 +141,10 @@ void usercontrol(void) {
     else if(Controller1.ButtonRight.pressing()){
       sortBall(2);
     }
-        else if(Controller1.ButtonLeft.pressing()){
+    else if(Controller1.ButtonLeft.pressing()){
       sortBall(3);
     }
-            else if(Controller1.ButtonX.pressing()){
+    else if(Controller1.ButtonX.pressing()){
       sortBall(4);
     }
     if (Controller1.ButtonR1.pressing()) {
@@ -188,13 +182,13 @@ void usercontrol(void) {
     }
 
     else if (!Controller1.ButtonL1.pressing() &&
-             !Controller1.ButtonL2.pressing() &&
-             !Controller1.ButtonR2.pressing()) {
+     !Controller1.ButtonL2.pressing() &&
+     !Controller1.ButtonR2.pressing()) {
       IntakeL.stop();
-      IntakeR.stop();
-    }
-  
+    IntakeR.stop();
   }
+  
+}
 
 }
 
