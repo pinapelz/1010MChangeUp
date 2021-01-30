@@ -36,7 +36,7 @@ void scoreTop(int time);
 void hasRedCallback();
 void ballLocated();
 void hasBlueCallback();
-int expDrive(int joyVal ,float driveExp ,int joyDead, int motorMin);
+int expDrive(int joyVal);
 void stopAll();
 void intakeScore(int time, int rotation);
 void elevatorScore(int time, int rotation);
@@ -64,27 +64,11 @@ bool usingIntake = false;
 int count = 0;
 int turntarget = 0;
 int kturntarget = 0;
-
-// A global instance of competition
 competition Competition;
 
 void pre_auton(void) {
   vexcodeInit();
-
 }
-
-
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              Autonomous Task                              */
-/*                                                                           */
-/*  This task is used to control your robot during the autonomous phase of   */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*///
-//left negative
-//right positive
 
 double convertDistance(double distance){
 return distance*11.1;
@@ -95,7 +79,6 @@ void resetTarget() {
 }
 void autonomous(void) {
 vex::task megaOof(speedometer);
-   //calibrateInertial();
   //100 deg  = 9 cm
 
 elevatorScoreTwo(1300,1300);
@@ -150,20 +133,12 @@ void usercontrol(void) {
 
     }
     else{
-      int joyDead = 5;
-      int motorMin = 15;
-      float driveExp = 1.4;
-        LeftMotorF.spin(fwd,expDrive(Controller1.Axis3.position() + Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-        
-        LeftMotorB.spin(fwd,expDrive(Controller1.Axis3.position() + Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-
-        RightMotorF.spin(fwd,expDrive(Controller1.Axis3.position() - Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
-
-        RightMotorB.spin(fwd,expDrive(Controller1.Axis3.position() - Controller1.Axis1.position(),
-        driveExp,joyDead,motorMin),pct);
+        int leftSpeed = getExpoValue(controllerY+controllerX);
+        int rightSpeed = getExpoValue(controllerY-controllerX);
+        LeftMotorF.spin(fwd,leftSpeed,pct);
+        LeftMotorB.spin(fwd,leftSpeed,pct);
+        RightMotorF.spin(fwd,rightSpeed,pct);
+        RightMotorB.spin(fwd,rightSpeed,pct);
 
     }
     if (Controller1.ButtonUp.pressing()) {
@@ -224,7 +199,6 @@ void usercontrol(void) {
       IntakeL.stop();
       IntakeR.stop();
     }
-         // checkBlue.broadcastAndWait();
   
   }
 

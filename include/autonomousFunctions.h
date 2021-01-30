@@ -15,19 +15,13 @@ void lockWheels() {
   RightMotorF.stop(brakeType::coast);
   RightMotorB.stop(brakeType::coast);
 }
-int sgn(int v){
-  if(v<0){
-    return -1;
-  }
-  if(v>0){
-    return 1;
-  }
-}
-int expDrive(int joyVal ,float driveExp ,int joyDead, int motorMin){
-  int joyMax = 128-joyDead;
-  int joySign = sgn(joyVal);
-  int joyLive = abs(joyVal)-joyDead;
-  return joySign*(motorMin+((100-motorMin)*pow(joyLive,driveExp)/pow(joyMax,driveExp)));
+int expDrive(int joystickValue){
+  int output = 0;
+    if(abs(joystickValue) > JOYSTICK_DEADZONE){
+      int direction = abs(joystickValue) / joystickValue;
+      output = (int) (direction * (1.2 * pow(1.0356, abs(joystickValue)) - 1.2 + 0.2 * abs(joystickValue)));
+      }
+  return output;
 }
 int matchTimer() {
   // 128x64

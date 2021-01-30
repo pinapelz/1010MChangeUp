@@ -22,7 +22,6 @@ void driveForward(int speed, int rot, int time) { // Drive forward function that
   LeftMotorB.setVelocity(speed, velocityUnits::pct);
   RightMotorF.setVelocity(speed, velocityUnits::pct);
   RightMotorB.setVelocity(speed, velocityUnits::pct);
-Brain.Screen.printAt(1, 60, "Turning Distance Remaining%f", 21);
   LeftMotorF.rotateFor(rot, rotationUnits::deg, false);
   RightMotorF.rotateFor(rot, rotationUnits::deg, false);
   LeftMotorB.rotateFor(rot, rotationUnits::deg, false);
@@ -115,16 +114,6 @@ void TimeIntake(int sec){
   IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); // Intake
   vex::task::sleep(sec); //2700
 }
-
-
-
-
-
-
-
-
-
-
 
 void resetEncoders() {
   LeftMotorF.resetPosition();
