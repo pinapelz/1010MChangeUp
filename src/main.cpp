@@ -81,8 +81,11 @@ void autonomous(void) {
 vex::task megaOof(speedometer);
   //100 deg  = 9 cm
 
-elevatorScoreTwo(1300,1300);
+elevatorScoreTwo(1300,1300); //Preset for bringing the ball up to the top but not scoring
+ballLocated();//Get ball to the intakes
+scoreTop(300);
 ballLocated();
+elevatorScoreTwo(1300,1300);
 
     /*driveForwardIntake(75,convertDistance(60),750);
     scoreTop(1000);
