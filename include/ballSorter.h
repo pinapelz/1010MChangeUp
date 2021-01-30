@@ -37,7 +37,6 @@ void elevatorScore(int time, int revolution){
 
 }
 void hasBlueCallback() {
-bool stopNow = false;
   Vision10.takeSnapshot(Vision10__BLUEBALL);
   if (Vision10.objectCount > 0) {
       IntakeL.stop();
@@ -58,10 +57,11 @@ bool stopNow = false;
 
   IntakeL.spin(fwd, 100, pct);
   IntakeR.spin(fwd, 100, pct);
- // Elevator.spin(fwd,75,pct);
   Elevator2.stop();
 
 }
+
+
 void seenRedBall(){
   while(true){
   Vision10.takeSnapshot(Vision10__REDBALL);
@@ -72,7 +72,6 @@ void seenRedBall(){
   }
   IntakeL.spin(fwd, 100, pct);
   IntakeR.spin(fwd, 100, pct);
- // Elevator.spin(fwd,75,pct);
   Elevator2.stop();
   }
 }
@@ -83,57 +82,32 @@ void seenRedBall(){
 
 
 void hasRedCallback() {
-
-
-  Vision10.takeSnapshot(Vision10__BLUEBALL);
+  Vision10.takeSnapshot(Vision10__REDBALL);
   if (Vision10.objectCount > 0) {
-    while (Vision10.objectCount > 0) {
-      Vision10.takeSnapshot(Vision10__BLUEBALL);
-
       IntakeL.stop();
       IntakeR.stop();
-      Elevator.spin(fwd, 75, pct);
-      Elevator2.spin(reverse, 100, pct);
-      if (Controller1.ButtonL2.pressing()) {
-        IntakeL.spin(fwd, 100, pct);
-        IntakeR.spin(fwd, 100, pct);
-      }
-      vex::task::sleep(300);
-    }
-
+      releaseBall(500,3);
+      ballsProcessed++;
     Elevator2.stop();
   }
 
-  Vision10.takeSnapshot(Vision10__REDBALL);
+  Vision10.takeSnapshot(Vision10__BLUEBALL);
 
   if (Vision10.objectCount > 0) {
-    while (Vision10.objectCount > 0) {
-      Vision10.takeSnapshot(Vision10__REDBALL);
-        IntakeL.spin(fwd, 100, pct);
-        IntakeR.spin(fwd, 100, pct);
-        task::sleep(300);
-      IntakeL.stop();
+          IntakeL.stop();
       IntakeR.stop();
-      Elevator.spin(forward, 75, pct);
-      Elevator2.spin(fwd, 100, pct);
-      if (Controller1.ButtonL2.pressing()) {
-        IntakeL.spin(fwd, 100, pct);
-        IntakeR.spin(fwd, 100, pct);
-      }
-      vex::task::sleep(400);
-    }
-    IntakeL.spin(fwd, 100, pct);
-    IntakeR.spin(fwd, 100, pct);
-    Elevator2.stop();
-    Elevator.stop();
+      elevatorScore(800,5);
+      ballsProcessed++;
   }
 
   IntakeL.spin(fwd, 100, pct);
   IntakeR.spin(fwd, 100, pct);
   Elevator2.stop();
-  Elevator.stop();
-  task::sleep(500);
-  }
+
+}
+
+
+
 
 
 
@@ -145,7 +119,7 @@ while(seenBallRed == false){
 redFind.broadcastAndWait();
 }
 }
-void sortBall(int process) {
+void sortBall(int process, int colour) {
   ballsProcessed = 0;
   event checkBlue = event();
   event checkRed = event();
@@ -156,6 +130,13 @@ void sortBall(int process) {
       stopAll();
       break;
     }
-    checkBlue.broadcastAndWait();
+    if(colour == 1){
+      //Score Red Balls and Drop Blue Balls
+      checkBlue.broadcastAndWait();
+    }
+    if(colour== 2){
+      //Score Blue Balls and Drop Red Balls
+      checkRed.broadcastAndWait();
+    }
   }
 }

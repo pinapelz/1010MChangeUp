@@ -10,17 +10,17 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         1               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial17           inertial      17              
-// Vision10             vision        10              
+// LeftMotorF           motor         15
+// RightMotorB          motor         3
+// RightMotorF          motor         12
+// LeftMotorB           motor         5
+// Controller1          controller
+// IntakeR              motor         6
+// IntakeL              motor         1
+// Elevator2            motor         19
+// Elevator             motor         20
+// Inertial17           inertial      17
+// Vision10             vision        10
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
@@ -38,9 +38,9 @@ int expDrive(int joyVal);
 void stopAll();
 void intakeScore(int time, int rotation);
 void elevatorScore(int time, int rotation);
-void driveForwardIntake(int speed, int rot,int time); 
+void driveForwardIntake(int speed, int rot, int time);
 void driveBackward(int speed, int rotation, int time);
-void sortBall(int count);
+void sortBall(int count, int colour);
 void releaseBall(int time, int speed, int rotation);
 void holdBall(int time, int speed, int rotation);
 void inertialRight(int speed, float degree);
@@ -57,9 +57,7 @@ bool runPid = true;
 int speedometer();
 competition Competition;
 
-void pre_auton(void) {
-  vexcodeInit();
-}
+void pre_auton(void) { vexcodeInit(); }
 
 void autonomous(void) {
   vex::task megaOof(speedometer);
@@ -75,13 +73,13 @@ void usercontrol(void) {
   int deadband = 5;
   bool exponential = true;
   while (1) {
-    if(!exponential){
+    if (!exponential) {
       int leftMotorSpeed =
-      (Controller1.Axis3.position() + Controller1.Axis1.position()) *
-      driveMultiplier;
+          (Controller1.Axis3.position() + Controller1.Axis1.position()) *
+          driveMultiplier;
       int rightMotorSpeed =
-      (Controller1.Axis3.position() - Controller1.Axis1.position()) *
-      driveMultiplier;
+          (Controller1.Axis3.position() - Controller1.Axis1.position()) *
+          driveMultiplier;
 
       if (abs(leftMotorSpeed) < deadband) {
         LeftMotorF.setVelocity(0, pct);
@@ -103,33 +101,30 @@ void usercontrol(void) {
       RightMotorF.spin(fwd);
       RightMotorB.spin(fwd);
 
-    }
-    else{
-      int leftSpeed = expDrive(Controller1.Axis3.position() + Controller1.Axis1.position());
-      int rightSpeed = expDrive(Controller1.Axis3.position() - Controller1.Axis1.position());
-      LeftMotorF.spin(fwd,leftSpeed,pct);
-      LeftMotorB.spin(fwd,leftSpeed,pct);
-      RightMotorF.spin(fwd,rightSpeed,pct);
-      RightMotorB.spin(fwd,rightSpeed,pct);
-
+    } else {
+      int leftSpeed =
+          expDrive(Controller1.Axis3.position() + Controller1.Axis1.position());
+      int rightSpeed =
+          expDrive(Controller1.Axis3.position() - Controller1.Axis1.position());
+      LeftMotorF.spin(fwd, leftSpeed, pct);
+      LeftMotorB.spin(fwd, leftSpeed, pct);
+      RightMotorF.spin(fwd, rightSpeed, pct);
+      RightMotorB.spin(fwd, rightSpeed, pct);
     }
     if (Controller1.ButtonUp.pressing()) {
       driveMultiplier = 1.0;
 
     } else if (Controller1.ButtonDown.pressing()) {
       driveMultiplier = 0.5;
-    }
-    else if(Controller1.ButtonY.pressing()){
-      sortBall(1);
-    }
-    else if(Controller1.ButtonRight.pressing()){
-      sortBall(2);
-    }
-    else if(Controller1.ButtonLeft.pressing()){
-      sortBall(3);
-    }
-    else if(Controller1.ButtonX.pressing()){
-      sortBall(4);
+    } else if (Controller1.ButtonY.pressing()) {
+      //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite
+      sortBall(1,1);
+    } else if (Controller1.ButtonRight.pressing()) {
+      sortBall(2,1);
+    } else if (Controller1.ButtonLeft.pressing()) {
+      sortBall(3,1);
+    } else if (Controller1.ButtonX.pressing()) {
+      sortBall(4,1);
     }
     if (Controller1.ButtonR1.pressing()) {
       Elevator.spin(reverse, 100, pct);
@@ -166,14 +161,12 @@ void usercontrol(void) {
     }
 
     else if (!Controller1.ButtonL1.pressing() &&
-     !Controller1.ButtonL2.pressing() &&
-     !Controller1.ButtonR2.pressing()) {
+             !Controller1.ButtonL2.pressing() &&
+             !Controller1.ButtonR2.pressing()) {
       IntakeL.stop();
-    IntakeR.stop();
+      IntakeR.stop();
+    }
   }
-  
-}
-
 }
 
 int main() {
