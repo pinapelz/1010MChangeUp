@@ -71,6 +71,10 @@ Discarded input sections
                 0x00000000       0x10 build/src/main.o
  .ARM.exidx.text._Z6setRedb
                 0x00000000        0x8 build/src/main.o
+ .text._Z11resetTargetv
+                0x00000000       0x20 build/src/main.o
+ .ARM.exidx.text._Z11resetTargetv
+                0x00000000        0x8 build/src/main.o
  .text._Z10lockWheelsv
                 0x00000000       0x4c build/src/main.o
  .ARM.exidx.text._Z10lockWheelsv
@@ -160,16 +164,12 @@ Discarded input sections
  .ARM.exidx.text._Z15convertDistanced
                 0x00000000        0x8 build/src/main.o
  .text._Z7pidTestv
-                0x00000000       0x68 build/src/main.o
+                0x00000000       0x70 build/src/main.o
  .ARM.exidx.text._Z7pidTestv
                 0x00000000        0x8 build/src/main.o
  .text._Z9pre_autonv
                 0x00000000        0x4 build/src/main.o
  .ARM.exidx.text._Z9pre_autonv
-                0x00000000        0x8 build/src/main.o
- .text._Z11resetTargetv
-                0x00000000       0x20 build/src/main.o
- .ARM.exidx.text._Z11resetTargetv
                 0x00000000        0x8 build/src/main.o
  .bss.seenRed   0x00000000        0x1 build/src/main.o
  .data.offset   0x00000000        0x8 build/src/main.o
@@ -182,14 +182,7 @@ Discarded input sections
                 0x00000000        0x4 build/src/main.o
  .bss.resetDriveEncoders
                 0x00000000        0x1 build/src/main.o
- .bss.resetEncoder
-                0x00000000        0x1 build/src/main.o
  .data.runPid   0x00000000        0x1 build/src/main.o
- .bss.intakeDegrees
-                0x00000000        0x4 build/src/main.o
- .bss.usingIntake
-                0x00000000        0x1 build/src/main.o
- .bss.count     0x00000000        0x4 build/src/main.o
  .llvm_addrsig  0x00000000       0x33 build/src/main.o
  .text          0x00000000        0x0 build/src/robot-config.o
  .group         0x00000000        0xc build/src/robot-config.o

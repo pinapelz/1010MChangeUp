@@ -53,23 +53,14 @@ int matchTimer();
 void pidTest();
 void calibrateInertial();
 void intake(int time, int speed, int rotation);
-bool resetEncoder = false;
 bool runPid = true;
 int speedometer();
-int intakeDegrees = 0;
-bool usingIntake = false;
-int count = 0;
 competition Competition;
 
 void pre_auton(void) {
   vexcodeInit();
 }
 
-
-void resetTarget() {
-  ktarget = 0;
-  turntarget = 0;
-}
 void autonomous(void) {
   vex::task megaOof(speedometer);
   redAuton();
@@ -188,11 +179,7 @@ void usercontrol(void) {
 int main() {
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
-
-  // Run the pre-autonomous function.
   pre_auton();
-
-  // Prevent main from exiting with an infinite loop.
   while (true) {
     wait(100, msec);
   }

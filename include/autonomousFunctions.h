@@ -15,7 +15,10 @@ int turntarget = 0;
 int intakeSpeed = 100;
 bool resetDriveEncoders = false;
 using namespace vex;
-
+void resetTarget() {
+  ktarget = 0;
+  turntarget = 0;
+}
 void lockWheels() {
   LeftMotorB.stop(brakeType::coast);
   LeftMotorF.stop(brakeType::coast);
@@ -403,5 +406,6 @@ void pidTest(){
   ktarget = 1000;
   turntarget = 0;
   vex::task::sleep(2000);
+  resetTarget();
 
 }
