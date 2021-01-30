@@ -4,13 +4,16 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "ballSorter.h"
 #include <string.h>
 double offset = 15.4;
+int JOYSTICK_DEADZONE = 5;
 int ktarget = 0;
+bool intakeBool = false;
+
 int turntarget = 0;
-int kintakespeed = 100;
-bool resetEncoders = false;
+int intakeSpeed = 100;
+bool resetDriveEncoders = false;
 using namespace vex;
 
 void lockWheels() {
@@ -311,9 +314,9 @@ void resetEncoders() {
 }
 
 int pidLoop() {
-  while (runPid) {
-    if (resetEncoders) {
-      resetEncoders = false;
+  while (true) {
+    if (resetDriveEncoders) {
+      resetDriveEncoders = false;
       intakeBool = false;
       resetEncoders();
     }
@@ -396,7 +399,7 @@ elevatorScoreTwo(1300,1300);
 
 void pidTest(){
   vex::task pidMovement(pidLoop);
-  resetEncoders = true;
+  resetDriveEncoders = true;
   ktarget = 1000;
   turntarget = 0;
   vex::task::sleep(2000);

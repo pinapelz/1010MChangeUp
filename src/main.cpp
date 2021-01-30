@@ -24,9 +24,7 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
-#include "ballSorter.h"
 #include <iostream>
-void resetEncoders();
 int rotateImages();
 using namespace vex;
 event checkRed = event();
@@ -57,15 +55,10 @@ void calibrateInertial();
 void intake(int time, int speed, int rotation);
 bool resetEncoder = false;
 bool runPid = true;
-bool intakeBool = true;
 int speedometer();
-int intakeSpeed = 0;
 int intakeDegrees = 0;
-int ktarget = 0;
 bool usingIntake = false;
 int count = 0;
-int turntarget = 0;
-int kturntarget = 0;
 competition Competition;
 
 void pre_auton(void) {
@@ -121,8 +114,8 @@ void usercontrol(void) {
 
     }
     else{
-      int leftSpeed = getExpoValue(controllerY+controllerX);
-      int rightSpeed = getExpoValue(controllerY-controllerX);
+      int leftSpeed = expDrive(Controller1.Axis3.position() + Controller1.Axis1.position());
+      int rightSpeed = expDrive(Controller1.Axis3.position() - Controller1.Axis1.position());
       LeftMotorF.spin(fwd,leftSpeed,pct);
       LeftMotorB.spin(fwd,leftSpeed,pct);
       RightMotorF.spin(fwd,rightSpeed,pct);
