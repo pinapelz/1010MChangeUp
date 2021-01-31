@@ -23,6 +23,7 @@ extern signature Vision10__SIG_5;
 extern signature Vision10__SIG_6;
 extern signature Vision10__SIG_7;
 extern vision Vision10;
+extern controller Controller2;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

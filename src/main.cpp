@@ -1,3 +1,19 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotorF           motor         15              
+// RightMotorB          motor         3               
+// RightMotorF          motor         12              
+// LeftMotorB           motor         5               
+// Controller1          controller                    
+// IntakeR              motor         6               
+// IntakeL              motor         1               
+// Elevator2            motor         19              
+// Elevator             motor         20              
+// Inertial17           inertial      17              
+// Vision10             vision        10              
+// Controller2          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
@@ -65,13 +81,14 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
+  bool partnerDrive  = true;
   vex::task megaOof(speedometer);
-  // vex::task slideshow(rotateImages);
+   vex::task slideshow(rotateImages);
   vex::task matchtime(matchTimer);
 
-  double driveMultiplier = 0.75;
+  double driveMultiplier = 0.9;
   int deadband = 5;
-  bool exponential = true;
+  bool exponential = false;
   while (1) {
     if (!exponential) {
       int leftMotorSpeed =
@@ -101,22 +118,40 @@ void usercontrol(void) {
       RightMotorF.spin(fwd);
       RightMotorB.spin(fwd);
 
-    } else {
-      int leftSpeed =
-          expDrive(Controller1.Axis3.position() + Controller1.Axis1.position());
+    }
+    
+    
+     else {
+        int leftSpeed = expDrive(Controller1.Axis3.position() + Controller1.Axis1.position());
       int rightSpeed =
           expDrive(Controller1.Axis3.position() - Controller1.Axis1.position());
       LeftMotorF.spin(fwd, leftSpeed, pct);
       LeftMotorB.spin(fwd, leftSpeed, pct);
       RightMotorF.spin(fwd, rightSpeed, pct);
       RightMotorB.spin(fwd, rightSpeed, pct);
-    }
+      }
+
+    
     if (Controller1.ButtonUp.pressing()) {
       driveMultiplier = 1.0;
 
     } else if (Controller1.ButtonDown.pressing()) {
       driveMultiplier = 0.5;
-    } else if (Controller1.ButtonY.pressing()) {
+    } 
+   if(partnerDrive){
+    if (Controller2.ButtonY.pressing()) {
+      //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite
+      sortBall(1,1);
+    } else if (Controller2.ButtonRight.pressing()) {
+      sortBall(2,1);
+    } else if (Controller2.ButtonLeft.pressing()) {
+      sortBall(3,1);
+    } else if (Controller2.ButtonX.pressing()) {
+      sortBall(4,1);
+    }
+   }
+    else{
+    if (Controller2.ButtonY.pressing()) {
       //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite
       sortBall(1,1);
     } else if (Controller1.ButtonRight.pressing()) {
@@ -126,21 +161,22 @@ void usercontrol(void) {
     } else if (Controller1.ButtonX.pressing()) {
       sortBall(4,1);
     }
-    if (Controller1.ButtonR1.pressing()) {
+   }
+    if (Controller1.ButtonR1.pressing()||Controller2.ButtonR1.pressing()) {
       Elevator.spin(reverse, 100, pct);
       Elevator2.spin(reverse, 100, pct);
       IntakeL.spin(fwd, 100, pct);
       IntakeR.spin(fwd, 100, pct);
-    } else if (Controller1.ButtonR2.pressing()) {
+    } else if (Controller1.ButtonR2.pressing()||Controller2.ButtonR2.pressing()) {
       Elevator.spin(fwd, 100, pct);
       Elevator2.spin(fwd, 100, pct);
 
-    } else if (Controller1.ButtonA.pressing()) {
+    } else if (Controller1.ButtonA.pressing()||Controller2.ButtonA.pressing()) {
       Elevator.spin(fwd, 100, pct);
       Elevator2.spin(reverse, 100, pct);
-    } else if (Controller1.ButtonX.pressing()) {
+    } else if (Controller1.ButtonX.pressing()||Controller2.ButtonX.pressing()) {
       Elevator.spin(fwd, 100, pct);
-    } else if (Controller1.ButtonB.pressing()) {
+    } else if (Controller1.ButtonB.pressing()||Controller2.ButtonB.pressing()) {
       Elevator.spin(reverse, 100, pct);
     }
 
@@ -148,13 +184,13 @@ void usercontrol(void) {
       Elevator.stop();
       Elevator2.stop();
     }
-    if (Controller1.ButtonL2.pressing()) {
+    if (Controller1.ButtonL2.pressing()||Controller2.ButtonL2.pressing()) {
       IntakeL.spin(fwd, 100, pct);
       IntakeR.spin(fwd, 100, pct);
 
     }
 
-    else if (Controller1.ButtonL1.pressing()) {
+    else if (Controller1.ButtonL1.pressing()||Controller2.ButtonL1.pressing()) {
       IntakeL.spin(reverse, 100, pct);
       IntakeR.spin(reverse, 100, pct);
 
