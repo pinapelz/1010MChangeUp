@@ -102,7 +102,7 @@ int speedometer() {
   while (true) {
     Brain.Screen.printAt(0, 40, "Elevator 1 RPM: %f", Elevator.velocity(rpm));
     Brain.Screen.printAt(0, 60, "Elevator 2 RPM: %f", Elevator2.velocity(rpm));
-    Brain.Screen.printAt(0,80,"Inertial Sensor Heading: %f", Inertial17.rotation(deg));
+    Brain.Screen.printAt(0,80,"Inertial Sensor Heading: %f", Inertial17.heading(deg));
     task::sleep(200);
   }
   return 0;
@@ -138,6 +138,27 @@ void driveForward(int speed, int rot, int time) { // Drive forward function that
   Elevator.stop();
   Elevator2.stop();
 }
+void driveForwardDrop(int speed, int rot, int time) { // Drive forward function that uses motor revrees
+  LeftMotorF.setVelocity(speed, velocityUnits::pct);
+  LeftMotorB.setVelocity(speed, velocityUnits::pct);
+  RightMotorF.setVelocity(speed, velocityUnits::pct);
+  RightMotorB.setVelocity(speed, velocityUnits::pct);
+  LeftMotorF.rotateFor(rot, rotationUnits::deg, false);
+  RightMotorF.rotateFor(rot, rotationUnits::deg, false);
+  LeftMotorB.rotateFor(rot, rotationUnits::deg, false);
+  RightMotorB.rotateFor(rot, rotationUnits::deg, false);
+    Elevator.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
+  Elevator2.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); 
+
+//Elevator.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
+  
+  vex::task::sleep(time);
+  lockWheels();
+  IntakeR.stop();
+  IntakeL.stop();
+  Elevator.stop();
+  Elevator2.stop();
+}
 
 void driveForwardIntake(int speed, int rot, int time) { // Drive forward function that uses motor revrees
   LeftMotorF.setVelocity(speed, velocityUnits::pct);
@@ -162,7 +183,7 @@ void driveForwardIntake(int speed, int rot, int time) { // Drive forward functio
 }
 void driveBackward(
   int speed, int rotation,
-    int time) { // Drive backward function that uses motor revrees
+    int time) { // Drive backward function that uses motor 
   LeftMotorF.setVelocity(speed, velocityUnits::pct);
   LeftMotorB.setVelocity(speed, velocityUnits::pct);
   RightMotorF.setVelocity(speed, velocityUnits::pct);
@@ -198,29 +219,29 @@ void intake(int time, int speed, int rotation) {
   vex::task::sleep(time);
 }
 void calibrateInertial() {
-  Inertial17.calibrate();
+  Inertial17.calibrate(); //Calibrate the inertials
   while (Inertial17.isCalibrating()) {
-    wait(100, msec);
+    wait(100, msec); //Wait until the inertial is finished calibrating
   }
 }
-void inertialLeft(int speed, float revreee) {
-  while(Inertial17.heading(degrees) >= (revreee - 14.8)){
+void inertialLeft(int speed, float degree) {//Function for turning left
+//While the reading on the inertial is less than the degree
+    //Turn left using the motors
     LeftMotorF.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
     RightMotorF.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
     LeftMotorB.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
     RightMotorB.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
-  }
-  
-
-  brakeWheels();
-
+  waitUntil((Inertial17.heading(degrees) <= (degree + 14.8)));
+  brakeWheels(); //Hold the motors in place
   task::sleep(200);
 }
-void inertialRight(int speed, float revree) {
+void inertialRight(int speed, float revree) {//Function for turning right
+//While the reading on the inertial is less than the degree
   LeftMotorF.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
   RightMotorF.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
   LeftMotorB.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
   RightMotorB.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+  //wait until the motors are turned to the amount
   waitUntil((Inertial17.heading(degrees) >= (revree - 14.8)));
   brakeWheels();
   task::sleep(200);
@@ -286,8 +307,8 @@ void holdBall(int speed, int rotation, int time){
 }
 
 void elevatorScoreTwo(int rotation, int time){
-  Elevator.setVelocity(75, pct);
-  Elevator2.setVelocity(75, pct);
+  Elevator.setVelocity(100, pct);
+  Elevator2.setVelocity(100, pct);
   Elevator.rotateFor(rotation, rotationUnits::deg, false);
   Elevator2.rotateFor(rotation, rotationUnits::deg, false);
   task::sleep(time);
@@ -425,39 +446,62 @@ void locateBallBlue(){
 void redAuton(){
   //100 deg  = 9 cm
   //right positive left negative
-  int scoreOne = 700;
-  int scoreTopTime = 1000;
+  vex::task wpfjpwo(speedometer);
+  int scoreOne = 1000;
+  int scoreTopTime = 900;
   calibrateInertial();
 
-  driveForward(75,convertDistance(70),2000);
-  inertialRight(75,130);
-  driveForwardIntake(75,convertDistance(60),750);
+ driveForward(75,convertDistance(70),1300);
+  inertialRight(75,126);
+  driveForwardIntake(75,convertDistance(65),1000);
   scoreTop(scoreOne,scoreTopTime);
+  timeOuttake(100);
+  driveBackward(75,convertDistance(70),1500);
+inertialRight(75,270);
+driveForward(100,convertDistance(116),1100);
+inertialLeft(75,Inertial17.heading()-90);
+driveForward(75,convertDistance(40),500);
+sortBall(3,1);
+stopAll();
+
+driveBackward(75,convertDistance(40),500);
+inertialRight(75,Inertial17.heading()+90);
+driveForwardDrop(80,convertDistance(133),1800);
+  inertialLeft(75,Inertial17.heading()-45);
+driveForwardIntake(75,convertDistance(45),500);
+sortBall(3,1);
+stopAll();
+driveBackward(75,400,10000000);
+
+
+
+
+
+
+   // sortBall(3,1);
+/*  scoreTop(scoreOne,scoreTopTime);
   int ballUp = 1100;
-elevatorScoreTwo(ballUp,1300); //Preset for bringing the ball up to the top but not scoring
+elevatorScoreTwo(ballUp,720); //Preset for bringing the ball up to the top but not scoring
 locateBallRed();
 scoreTop(scoreOne,scoreTopTime);
 locateBallRed();
-elevatorScoreTwo(ballUp,1300);
+elevatorScoreTwo(ballUp,720);
 locateBallBlue();
 scoreTop(scoreOne,scoreTopTime);
 sortBall(1,1);
 stopAll();
-timeOuttake(200);
+timeOuttake(300);
+stopAll();
+driveBackward(75,convertDistance(70),1500);
+inertialLeft(75,100);
+*/
 
   
 /*int ballUp = 1100;
 elevatorScoreTwo(ballUp,1300); //Preset for bringing the ball up to the top but not scoring
 locateBallRed();
 //Get ball to the intakes
-scoreTop(300);
-locateBallRed();
-elevatorScoreTwo(ballUp,1300);
-locateBallBlue();
-scoreTop(300);
-sortBall(1,1);
-stopAll();
-*/
+
 
 
    /*driveForwardIntake(75,convertDistance(60),750);

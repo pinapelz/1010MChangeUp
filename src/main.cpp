@@ -136,8 +136,9 @@ void usercontrol(void) {
       driveMultiplier = 1.0;
 
     } else if (Controller1.ButtonDown.pressing()) {
-      driveMultiplier = 0.5;
+      redAuton();
     } 
+  
    if(partnerDrive){
     if (Controller2.ButtonY.pressing()) {
       //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite
