@@ -43,10 +43,6 @@
 #include <iostream>
 int rotateImages();
 using namespace vex;
-event checkRed = event();
-void elevatorScoreTwo(int rot, int time);
-void setRed(bool red);
-void scoreTop(int time);
 void hasRedCallback();
 void ballLocated();
 void hasBlueCallback();
@@ -61,6 +57,11 @@ void releaseBall(int time, int speed, int rotation);
 void holdBall(int time, int speed, int rotation);
 void inertialRight(int speed, float degree);
 void redAuton();
+void blueAuton();
+void redAutoShuffle();
+void blueAutoShuffle();
+void redAutoSecondGoal();
+void blueAutoSecondGoal();
 void driveForward(int speed, int rot, int time);
 void inertialLeft(int speed, float degree);
 void timeOuttake(int sec);
@@ -77,6 +78,19 @@ void pre_auton(void) { vexcodeInit(); }
 
 void autonomous(void) {
   vex::task megaOof(speedometer);
+  /*
+  void redAuton();
+void blueAuton();
+void redAutoShuffle();
+void blueAutoShuffle();
+void redAutoSecondGoal();
+void blueAutoSecondGoal();
+
+Replace Below with whichever one you need to run.
+Blue autos are just what we did but with turning and colour sorting reversed
+
+If you need to change auto code go under autonomusFunctions.h and scroll to bottom
+  */
   redAuton();
 }
 

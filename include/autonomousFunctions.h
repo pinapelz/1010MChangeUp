@@ -11,7 +11,8 @@ int JOYSTICK_DEADZONE = 5;
 int ktarget = 0;
 bool intakeBool = false;
 bool seenBallRed = false;
-
+  int scoreOne = 1000;
+  int scoreTopTime = 900;
 int turntarget = 0;
 int intakeSpeed = 100;
 bool resetDriveEncoders = false;
@@ -443,6 +444,10 @@ void locateBallBlue(){
     IntakeL.stop();
     IntakeR.stop();
 }
+
+/*
+The variables scoreOne and scoreTopTime can be edited at the very top of this header file
+*/
 void shuffleSortRed(){ //This is for red side autos
   //Start sequence when lined up at the goal with 1 ball in vision position
   scoreTop(scoreOne,scoreTopTime);
@@ -463,6 +468,7 @@ driveBackward(75,convertDistance(70),1500);
 }
 void shuffleSortBlue(){ //This is for red side autos
   //Start sequence when lined up at the goal with 1 ball in vision position
+  
   scoreTop(scoreOne,scoreTopTime);
   int ballUp = 1100;
 elevatorScoreTwo(ballUp,720); //Preset for bringing the ball up to the top but not scoring
@@ -490,8 +496,6 @@ stopAll();
 void redAuton(){
   //100 deg  = 9 cm
   //right positive left negative
-  int scoreOne = 1000;
-  int scoreTopTime = 900;
   calibrateInertial();
 //We need converDistance() surrounding the number to convert from centimeters to motor units
 driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
@@ -504,7 +508,9 @@ inertialRight(75,270); //Speed, Heading
 driveForward(100,convertDistance(116),1100);
 inertialLeft(75,Inertial17.heading()-90);
 driveForward(75,convertDistance(40),500);
-sortBall(3,1);
+sortBall(3,1); //Balls to sort, Sort Mode         
+//Mode 1 = drop blue score red    
+//Mode 2  = drop red score blue
 stopAll();
 driveBackward(75,convertDistance(40),500);
 inertialRight(75,Inertial17.heading()+90);
