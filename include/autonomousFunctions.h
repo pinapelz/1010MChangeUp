@@ -443,43 +443,9 @@ void locateBallBlue(){
     IntakeL.stop();
     IntakeR.stop();
 }
-void redAuton(){
-  //100 deg  = 9 cm
-  //right positive left negative
-  vex::task wpfjpwo(speedometer);
-  int scoreOne = 1000;
-  int scoreTopTime = 900;
-  calibrateInertial();
-
- driveForward(75,convertDistance(70),1300);
-  inertialRight(75,126);
-  driveForwardIntake(75,convertDistance(65),1000);
+void shuffleSortRed(){ //This is for red side autos
+  //Start sequence when lined up at the goal with 1 ball in vision position
   scoreTop(scoreOne,scoreTopTime);
-  timeOuttake(100);
-  driveBackward(75,convertDistance(70),1500);
-inertialRight(75,270);
-driveForward(100,convertDistance(116),1100);
-inertialLeft(75,Inertial17.heading()-90);
-driveForward(75,convertDistance(40),500);
-sortBall(3,1);
-stopAll();
-
-driveBackward(75,convertDistance(40),500);
-inertialRight(75,Inertial17.heading()+90);
-driveForwardDrop(80,convertDistance(133),1800);
-  inertialLeft(75,Inertial17.heading()-45);
-driveForwardIntake(75,convertDistance(45),500);
-sortBall(3,1);
-stopAll();
-driveBackward(75,400,10000000);
-
-
-
-
-
-
-   // sortBall(3,1);
-/*  scoreTop(scoreOne,scoreTopTime);
   int ballUp = 1100;
 elevatorScoreTwo(ballUp,720); //Preset for bringing the ball up to the top but not scoring
 locateBallRed();
@@ -493,21 +459,143 @@ stopAll();
 timeOuttake(300);
 stopAll();
 driveBackward(75,convertDistance(70),1500);
-inertialLeft(75,100);
-*/
 
-  
-/*int ballUp = 1100;
-elevatorScoreTwo(ballUp,1300); //Preset for bringing the ball up to the top but not scoring
+}
+void shuffleSortBlue(){ //This is for red side autos
+  //Start sequence when lined up at the goal with 1 ball in vision position
+  scoreTop(scoreOne,scoreTopTime);
+  int ballUp = 1100;
+elevatorScoreTwo(ballUp,720); //Preset for bringing the ball up to the top but not scoring
+locateBallBlue();
+scoreTop(scoreOne,scoreTopTime);
+locateBallBlue();
+elevatorScoreTwo(ballUp,720);
 locateBallRed();
-//Get ball to the intakes
+scoreTop(scoreOne,scoreTopTime);
+sortBall(1,2);
+stopAll();
+timeOuttake(300);
+stopAll();
+driveBackward(75,convertDistance(70),1500);
+}
+
+void redAutoShuffle(){ //Only shuffle sorting first goal
+driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
+inertialRight(75,126); //Speed, Heading Position 
+driveForwardIntake(75,convertDistance(65),1000); 
+shuffleSortRed();
+stopAll();
+}
+
+void redAuton(){
+  //100 deg  = 9 cm
+  //right positive left negative
+  int scoreOne = 1000;
+  int scoreTopTime = 900;
+  calibrateInertial();
+//We need converDistance() surrounding the number to convert from centimeters to motor units
+driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
+inertialRight(75,126); //Speed, Heading Position 
+driveForwardIntake(75,convertDistance(65),1000); 
+scoreTop(scoreOne,scoreTopTime); //Rotation,Time allocated (Defaults to MAX Speed)
+timeOuttake(100); //milliseconds (Timing based outtake)
+driveBackward(75,convertDistance(70),1500);
+inertialRight(75,270); //Speed, Heading
+driveForward(100,convertDistance(116),1100);
+inertialLeft(75,Inertial17.heading()-90);
+driveForward(75,convertDistance(40),500);
+sortBall(3,1);
+stopAll();
+driveBackward(75,convertDistance(40),500);
+inertialRight(75,Inertial17.heading()+90);
+driveForwardDrop(80,convertDistance(133),1800);
+  inertialLeft(75,Inertial17.heading()-45);
+driveForwardIntake(75,convertDistance(45),500);
+sortBall(3,1);
+stopAll();
+driveBackward(75,400,10000000);
+}
+
+void redAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal
+int scoreOne = 1000;
+int scoreTopTime = 900;
+calibrateInertial();
+driveForward(75,convertDistance(70),1300);
+inertialRight(75,126);
+driveForwardIntake(75,convertDistance(65),1000);
+scoreTop(scoreOne,scoreTopTime);
+timeOuttake(100);
+driveBackward(75,convertDistance(70),1500);
+inertialRight(75,270);
+driveForward(100,convertDistance(116),1100);
+inertialLeft(75,Inertial17.heading()-90);
+driveForward(75,convertDistance(40),500);
+sortBall(3,1);
+stopAll();
+driveBackward(75,convertDistance(40),500);
+}
 
 
 
-   /*driveForwardIntake(75,convertDistance(60),750);
-    scoreTop(700);
-    sortBall(3,1);*/
 
+//BLUE AUTONOMOUS BELOW
+
+
+void blueAutoShuffle(){ //Only shuffle sorting first goal
+driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
+inertialLeft(75,126); //Speed, Heading Position 
+driveForwardIntake(75,convertDistance(65),1000); 
+shuffleSortBlue();
+stopAll();
+driveBackward(75,convertDistance(70),1500);
+}
+
+void blueAuton(){
+  //100 deg  = 9 cm
+  //right positive left negative
+  int scoreOne = 1000;
+  int scoreTopTime = 900;
+  calibrateInertial();
+//We need converDistance() surrounding the number to convert from centimeters to motor units
+driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
+inertialLeft(75,Inertial17.heading()-126); //Speed, Heading Position 
+driveForwardIntake(75,convertDistance(65),1000); 
+scoreTop(scoreOne,scoreTopTime); //Rotation,Time allocated (Defaults to MAX Speed)
+timeOuttake(100); //milliseconds (Timing based outtake)
+driveBackward(75,convertDistance(70),1500);
+inertialLeft(75,Inertial17.heading()-144); //Speed, Heading //270-126 = diff of 144
+driveForward(100,convertDistance(116),1100);
+inertialRight(75,Inertial17.heading()+90);
+driveForward(75,convertDistance(40),500);
+sortBall(3,2);
+stopAll();
+driveBackward(75,convertDistance(40),500);
+inertialLeft(75,Inertial17.heading()-90);
+driveForwardDrop(80,convertDistance(133),1800);
+  inertialRight(75,Inertial17.heading()+45);
+driveForwardIntake(75,convertDistance(45),500);
+sortBall(3,2);
+stopAll();
+driveBackward(75,400,10000000);
+}
+
+void blueAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal
+int scoreOne = 1000;
+int scoreTopTime = 900;
+calibrateInertial();
+driveForward(75,convertDistance(70),1300);
+inertialLeft(75,Inertial17.heading()-126);
+driveForwardIntake(75,convertDistance(65),1000);
+scoreTop(scoreOne,scoreTopTime);
+timeOuttake(100);
+driveBackward(75,convertDistance(70),1500);
+inertialLeft(75,Inertial17.heading()-144);
+driveForward(100,convertDistance(116),1100);
+inertialRight(75,Inertial17.heading()+90);
+driveForward(75,convertDistance(40),500);
+sortBall(3,2);
+stopAll();
+driveBackward(75,convertDistance(40),500);
 }
 
 void pidTest(){
