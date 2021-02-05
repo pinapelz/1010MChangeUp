@@ -76,17 +76,15 @@ competition Competition;
 
 void pre_auton(void) { 
   vexcodeInit(); 
-  Brain.Screen.Print();
+  Brain.Screen.setFont(vex::fontType::mono60);
+  Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
   calibrateInertial();
-
+  Brain.Screen.clearScreen();
+  Brain.Screen.printAt(0, 40, "Calibration Complete!");
 }
 
 void autonomous(void) {
   vex::task megaOof(speedometer);
-  Brain.Screen.setFont(vex::fontType::mono60);
-  Brain.Screen.printAt(0, 40, "Calibrating Inertial...";
-    calibrateInertial();
-    Brain.Screen.printAt(0, 40, "Calibration Complete!";
   /*
   void redAuton();
 void blueAuton();
