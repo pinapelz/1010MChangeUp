@@ -486,7 +486,6 @@ driveBackward(75,convertDistance(70),1500);
 }
 
 void redAutoShuffle(){ //Only shuffle sorting first goal
-calibrateInertial();
 driveForward(65,convertDistance(75),1300); //Speed,Distance (motor degrees), Time Allocated
 inertialRight(75,126); //Speed, Heading Position 
 driveForwardIntake(75,convertDistance(70),1000); 
@@ -497,7 +496,6 @@ stopAll();
 void redAuton(){
   //100 deg  = 9 cm
   //right positive left negative
-  calibrateInertial();
 //We need converDistance() surrounding the number to convert from centimeters to motor units
 driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
 inertialRight(75,126); //Speed, Heading Position 
@@ -526,7 +524,6 @@ driveBackward(75,400,10000000);
 void redAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal
 int scoreOne = 1000;
 int scoreTopTime = 900;
-calibrateInertial();
 driveForward(75,convertDistance(70),1300);
 inertialRight(75,126);
 driveForwardIntake(75,convertDistance(70),1000);
@@ -551,7 +548,6 @@ driveBackward(75,convertDistance(40),500);
 
 
 void blueAutoShuffle(){ //Only shuffle sorting first goal
-calibrateInertial();
 driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
 inertialRight(75,126); //Speed, Heading Position 
 driveForwardIntake(65,convertDistance(75),1000); 
@@ -565,7 +561,6 @@ void blueAuton(){
   //right positive left negative
   int scoreOne = 1000;
   int scoreTopTime = 900;
-  calibrateInertial();
 //We need converDistance() surrounding the number to convert from centimeters to motor units
 driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
 inertialLeft(75,Inertial17.heading()-126); //Speed, Heading Position 
@@ -592,7 +587,6 @@ driveBackward(75,400,10000000);
 void blueAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal
 int scoreOne = 1000;
 int scoreTopTime = 900;
-calibrateInertial();
 driveForward(75,convertDistance(70),1300);
 inertialRight(75,126);
 driveForwardIntake(75,convertDistance(70),1000);
