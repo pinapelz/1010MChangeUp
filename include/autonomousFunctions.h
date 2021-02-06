@@ -196,6 +196,22 @@ void driveBackward(
   RightMotorB.rotateFor(-rotation, rotationUnits::deg, false);
   vex::task::sleep(time);
 }
+void driveBackwardOuttake(
+  int speed, int rotation,
+    int time) { // Drive backward function that uses motor 
+  LeftMotorF.setVelocity(speed, velocityUnits::pct);
+  LeftMotorB.setVelocity(speed, velocityUnits::pct);
+  RightMotorF.setVelocity(speed, velocityUnits::pct);
+  RightMotorB.setVelocity(speed, velocityUnits::pct);
+
+  LeftMotorF.rotateFor(-rotation, rotationUnits::deg, false);
+  RightMotorF.rotateFor(-rotation, rotationUnits::deg, false);
+  LeftMotorB.rotateFor(-rotation, rotationUnits::deg, false);
+  RightMotorB.rotateFor(-rotation, rotationUnits::deg, false);
+    IntakeR.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); 
+  IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
+  vex::task::sleep(time);
+}
 
 void driveRight(int speed, int rotation,
                 int time) { // Turn right using motor revrees
@@ -323,13 +339,13 @@ void timeScore(int sec) {
   task::sleep(sec);
 }
 void scoreTop(int rotation, int time) {
-  Elevator2.setVelocity(127, pct);
+  Elevator2.setVelocity(85, pct);
    Elevator2.rotateFor(rotation, rotationUnits::deg, false);
   task::sleep(time);
 }
 void timeIntake(int sec) {
-  IntakeR.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); 
-  IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); 
+  IntakeR.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
+  IntakeL.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
   vex::task::sleep(sec);                                               
 }
 void timeOuttake(int sec){
@@ -492,30 +508,36 @@ driveForwardIntake(75,convertDistance(70),1000);
 shuffleSortRed();
 stopAll();
 }
-
 void redAuton(){
   //100 deg  = 9 cm
   //right positive left negative
+  calibrateInertial();
 //We need converDistance() surrounding the number to convert from centimeters to motor units
 driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
 inertialRight(75,126); //Speed, Heading Position 
-driveForwardIntake(75,convertDistance(65),1000); 
+driveForwardIntake(75,convertDistance(70),1000); 
 scoreTop(scoreOne,scoreTopTime); //Rotation,Time allocated (Defaults to MAX Speed)
 timeOuttake(100); //milliseconds (Timing based outtake)
 driveBackward(75,convertDistance(70),1500);
-inertialRight(75,270); //Speed, Heading
-driveForward(100,convertDistance(116),1100);
+inertialRight(75,265); //Speed, Heading
+driveForward(100,convertDistance(125),1200);
 inertialLeft(75,Inertial17.heading()-90);
-driveForward(75,convertDistance(40),500);
-sortBall(3,1); //Balls to sort, Sort Mode         
-//Mode 1 = drop blue score red    
+driveForward(75,convertDistance(47),600);
+
+//sortBall(3,1); //Balls to sort, Sort Mode
+//Mode 1 = drop blue score red
 //Mode 2  = drop red score blue
+
+//safer alternative?:
+elevatorScore(800,5);
+
+timeOuttake(100);
 stopAll();
 driveBackward(75,convertDistance(40),500);
 inertialRight(75,Inertial17.heading()+90);
 driveForwardDrop(80,convertDistance(133),1800);
-  inertialLeft(75,Inertial17.heading()-45);
-driveForwardIntake(75,convertDistance(45),500);
+  inertialLeft(75,Inertial17.heading()-55);
+driveForwardIntake(75,convertDistance(85),800);
 sortBall(3,1);
 stopAll();
 driveBackward(75,400,10000000);
@@ -531,57 +553,14 @@ scoreTop(scoreOne,scoreTopTime);
 timeOuttake(100);
 driveBackward(75,convertDistance(70),1500);
 inertialRight(75,270);
-driveForward(100,convertDistance(116),1100);
-inertialLeft(75,Inertial17.heading()-90);
-driveForward(75,convertDistance(47),600);
-elevatorScoreTwo(1200,800);
+driveForward(100,convertDistance(125),1400);
+inertialLeft(75,Inertial17.heading()-89);
+driveForward(75,convertDistance(49),600);
 sortBall(2,1);
 stopAll();
-timeOuttake(100);
-driveBackward(75,convertDistance(40),500);
-}
-
-
-
-
-//BLUE AUTONOMOUS BELOW
-
-
-void blueAutoShuffle(){ //Only shuffle sorting first goal
-driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
-inertialRight(75,126); //Speed, Heading Position 
-driveForwardIntake(65,convertDistance(75),1000); 
-shuffleSortBlue();
-stopAll();
-driveBackward(75,convertDistance(70),1500);
-}
-
-void blueAuton(){
-  //100 deg  = 9 cm
-  //right positive left negative
-  int scoreOne = 1000;
-  int scoreTopTime = 900;
-//We need converDistance() surrounding the number to convert from centimeters to motor units
-driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
-inertialLeft(75,Inertial17.heading()-126); //Speed, Heading Position 
-driveForwardIntake(75,convertDistance(65),1000); 
-scoreTop(scoreOne,scoreTopTime); //Rotation,Time allocated (Defaults to MAX Speed)
-timeOuttake(100); //milliseconds (Timing based outtake)
-driveBackward(75,convertDistance(70),1500);
-inertialLeft(75,Inertial17.heading()-144); //Speed, Heading //270-126 = diff of 144
-driveForward(100,convertDistance(116),1100);
-inertialRight(75,Inertial17.heading()+90);
-driveForward(75,convertDistance(40),500);
-sortBall(3,2);
+timeIntake(500);
 stopAll();
 driveBackward(75,convertDistance(40),500);
-inertialLeft(75,Inertial17.heading()-90);
-driveForwardDrop(80,convertDistance(133),1800);
-  inertialRight(75,Inertial17.heading()+45);
-driveForwardIntake(75,convertDistance(45),500);
-sortBall(3,2);
-stopAll();
-driveBackward(75,400,10000000);
 }
 
 void blueAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal
@@ -594,14 +573,58 @@ scoreTop(scoreOne,scoreTopTime);
 timeOuttake(100);
 driveBackward(75,convertDistance(70),1500);
 inertialRight(75,270);
-driveForward(100,convertDistance(116),1100);
-inertialLeft(75,Inertial17.heading()-90);
-driveForward(75,convertDistance(47),600);
-elevatorScoreTwo(1200,800);
+driveForward(100,convertDistance(125),1400);
+inertialLeft(75,Inertial17.heading()-92);
+driveForward(75,convertDistance(49),600);
 sortBall(2,2);
+stopAll();
+timeIntake(500);
 stopAll();
 driveBackward(75,convertDistance(40),500);
 }
+
+
+//BLUE AUTONOMOUS BELOW
+
+
+void blueAutoShuffle(){ //Only shuffle sorting first goal
+driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
+inertialRight(75,126); //Speed, Heading Position 
+driveForwardIntake(65,convertDistance(75),1000); 
+shuffleSortBlue();
+stopAll();
+
+}
+
+void blueAuton(){
+  //100 deg  = 9 cm
+  //right positive left negative
+  int scoreOne = 1000;
+  int scoreTopTime = 900;
+//We need converDistance() surrounding the number to convert from centimeters to motor units
+driveForward(75,convertDistance(70),1300); //Speed,Distance (motor degrees), Time Allocated
+inertialRight(75,126); //Speed, Heading Position 
+driveForwardIntake(75,convertDistance(65),1000); 
+scoreTop(scoreOne,scoreTopTime); //Rotation,Time allocated (Defaults to MAX Speed)
+timeOuttake(100); //milliseconds (Timing based outtake)
+driveBackward(75,convertDistance(70),1500);
+inertialLeft(75,Inertial17.heading()-144); //Speed, Heading //270-126 = diff of 144
+driveForward(100,convertDistance(116),1100);
+inertialRight(75,Inertial17.heading()+90);
+driveForward(75,convertDistance(40),500);
+elevatorScoreTwo(1200,800);
+stopAll();
+driveBackward(75,convertDistance(40),500);
+inertialLeft(75,Inertial17.heading()-86);
+driveForwardDrop(80,convertDistance(133),1800);
+  inertialRight(75,Inertial17.heading()+45);
+driveForwardIntake(75,convertDistance(45),500);
+sortBall(3,2);
+stopAll();
+driveBackward(75,400,10000000);
+}
+
+
 
 void pidTest(){
   vex::task pidMovement(pidLoop);

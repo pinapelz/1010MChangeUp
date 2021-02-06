@@ -76,17 +76,15 @@ competition Competition;
 
 void pre_auton(void) { 
   vexcodeInit(); 
-  Brain.Screen.Print();
-  calibrateInertial();
-
+  Brain.Screen.setFont(vex::fontType::mono60);
+  Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
+    calibrateInertial();
+    Brain.Screen.printAt(0, 40, "Calibration Complete!");
 }
 
 void autonomous(void) {
   vex::task megaOof(speedometer);
-  Brain.Screen.setFont(vex::fontType::mono60);
-  Brain.Screen.printAt(0, 40, "Calibrating Inertial...";
-    calibrateInertial();
-    Brain.Screen.printAt(0, 40, "Calibration Complete!";
+
   /*
   void redAuton();
 void blueAuton();
@@ -100,7 +98,8 @@ Blue autos are just what we did but with turning and colour sorting reversed
 
 If you need to change auto code go under autonomusFunctions.h and scroll to bottom
   */
-  redAuton();
+ 
+  blueAutoSecondGoal();
 }
 
 
