@@ -43,10 +43,6 @@
 #include <iostream>
 int rotateImages();
 using namespace vex;
-event checkRed = event();
-void elevatorScoreTwo(int rot, int time);
-void setRed(bool red);
-void scoreTop(int time);
 void hasRedCallback();
 void ballLocated();
 void hasBlueCallback();
@@ -61,6 +57,11 @@ void releaseBall(int time, int speed, int rotation);
 void holdBall(int time, int speed, int rotation);
 void inertialRight(int speed, float degree);
 void redAuton();
+void blueAuton();
+void redAutoShuffle();
+void blueAutoShuffle();
+void redAutoSecondGoal();
+void blueAutoSecondGoal();
 void driveForward(int speed, int rot, int time);
 void inertialLeft(int speed, float degree);
 void timeOuttake(int sec);
@@ -73,12 +74,34 @@ bool runPid = true;
 int speedometer();
 competition Competition;
 
-void pre_auton(void) { vexcodeInit(); }
+void pre_auton(void) { 
+  vexcodeInit(); 
+  Brain.Screen.setFont(vex::fontType::mono60);
+  Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
+    calibrateInertial();
+    Brain.Screen.printAt(0, 40, "Calibration Complete!");
+}
 
 void autonomous(void) {
   vex::task megaOof(speedometer);
-  redAuton();
+
+  /*
+  void redAuton();
+void blueAuton();
+void redAutoShuffle();
+void blueAutoShuffle();
+void redAutoSecondGoal();
+void blueAutoSecondGoal();
+
+Replace Below with whichever one you need to run.
+Blue autos are just what we did but with turning and colour sorting reversed
+
+If you need to change auto code go under autonomusFunctions.h and scroll to bottom
+  */
+ 
+  blueAutoSecondGoal();
 }
+
 
 void usercontrol(void) {
   bool partnerDrive  = true;
@@ -86,6 +109,7 @@ void usercontrol(void) {
    vex::task slideshow(rotateImages);
   vex::task matchtime(matchTimer);
 
+  int sortMode = 1;
   double driveMultiplier = 0.9;
   int deadband = 5;
   bool exponential = false;
@@ -142,25 +166,25 @@ void usercontrol(void) {
    if(partnerDrive){
     if (Controller2.ButtonY.pressing()) {
       //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite
-      sortBall(1,1);
+      sortBall(1,sortMode);
     } else if (Controller2.ButtonRight.pressing()) {
-      sortBall(2,1);
+      sortBall(2,sortMode);
     } else if (Controller2.ButtonLeft.pressing()) {
-      sortBall(3,1);
+      sortBall(3,sortMode);
     } else if (Controller2.ButtonX.pressing()) {
-      sortBall(4,1);
+      sortBall(4,sortMode);
     }
    }
     else{
     if (Controller2.ButtonY.pressing()) {
       //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite
-      sortBall(1,1);
+      sortBall(1,sortMode);
     } else if (Controller1.ButtonRight.pressing()) {
-      sortBall(2,1);
+      sortBall(2,sortMode);
     } else if (Controller1.ButtonLeft.pressing()) {
-      sortBall(3,1);
+      sortBall(3,sortMode);
     } else if (Controller1.ButtonX.pressing()) {
-      sortBall(4,1);
+      sortBall(4,sortMode);
     }
    }
     if (Controller1.ButtonR1.pressing()||Controller2.ButtonR1.pressing()) {
