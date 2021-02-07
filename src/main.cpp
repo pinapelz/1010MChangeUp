@@ -62,6 +62,8 @@ void redAutoShuffle();
 void blueAutoShuffle();
 void redAutoSecondGoal();
 void blueAutoSecondGoal();
+void blueAutoShuffleOpposite();
+void blueAutoSecondOpposite();
 void driveForward(int speed, int rot, int time);
 void inertialLeft(int speed, float degree);
 void timeOuttake(int sec);
@@ -83,7 +85,7 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-  vex::task megaOof(speedometer);
+ // vex::task megaOof(speedometer);
 
   /*
   void redAuton();
@@ -92,14 +94,14 @@ void redAutoShuffle();
 void blueAutoShuffle();
 void redAutoSecondGoal();
 void blueAutoSecondGoal();
-
+void blueAutoSecondOpposite
 Replace Below with whichever one you need to run.
 Blue autos are just what we did but with turning and colour sorting reversed
 
 If you need to change auto code go under autonomusFunctions.h and scroll to bottom
   */
- 
-  blueAutoSecondGoal();
+
+blueAutoShuffle();
 }
 
 
@@ -109,7 +111,7 @@ void usercontrol(void) {
    vex::task slideshow(rotateImages);
   vex::task matchtime(matchTimer);
 
-  int sortMode = 1;
+  int sortMode = 2;
   double driveMultiplier = 0.9;
   int deadband = 5;
   bool exponential = false;
