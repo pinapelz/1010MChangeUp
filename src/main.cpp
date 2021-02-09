@@ -46,7 +46,7 @@ using namespace vex;
 void hasRedCallback();
 void ballLocated();
 void hasBlueCallback();
-int expDrive(int joyVal);
+void cubeDrive();
 void stopAll();
 void intakeScore(int time, int rotation);
 void elevatorScore(int time, int rotation);
@@ -101,20 +101,20 @@ Blue autos are just what we did but with turning and colour sorting reversed
 If you need to change auto code go under autonomusFunctions.h and scroll to bottom
   */
 
-blueAutoShuffle();
+redAutoShuffleOpposite();
 }
 
 
 void usercontrol(void) {
   bool partnerDrive  = true;
-  vex::task megaOof(speedometer);
+  //vex::task megaOof(speedometer);
    vex::task slideshow(rotateImages);
   vex::task matchtime(matchTimer);
 
   int sortMode = 2;
   double driveMultiplier = 0.9;
   int deadband = 5;
-  bool exponential = false;
+  bool exponential = true;
   while (1) {
     if (!exponential) {
       int leftMotorSpeed =
@@ -148,13 +148,7 @@ void usercontrol(void) {
     
     
      else {
-        int leftSpeed = expDrive(Controller1.Axis3.position() + Controller1.Axis1.position());
-      int rightSpeed =
-          expDrive(Controller1.Axis3.position() - Controller1.Axis1.position());
-      LeftMotorF.spin(fwd, leftSpeed, pct);
-      LeftMotorB.spin(fwd, leftSpeed, pct);
-      RightMotorF.spin(fwd, rightSpeed, pct);
-      RightMotorB.spin(fwd, rightSpeed, pct);
+     cubeDrive();
       }
 
     

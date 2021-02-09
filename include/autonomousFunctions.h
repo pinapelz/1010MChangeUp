@@ -34,13 +34,19 @@ void brakeWheels(){
   RightMotorF.stop(brakeType::hold);
   RightMotorB.stop(brakeType::hold);
 }
-int expDrive(int joystickValue){
-  int output = 0;
-  if(abs(joystickValue) > JOYSTICK_DEADZONE){
-    int direction = abs(joystickValue) / joystickValue;
-    output = direction * (1.2 * pow(1.0356, abs(joystickValue)) - 1.2 + 0.2 * abs(joystickValue));
-  }
-  return output;
+void cubeDrive(){
+        float max = 127.0;
+        float left_percent = Controller1.Axis1.value()+Controller1.Axis3.value()/max;
+        float right_percent = Controller1.Axis3.value()-Controller1.Axis1.value()/max;
+        float left_new_percent = left_percent * left_percent * left_percent;
+        float right_new_percent = right_percent * right_percent * right_percent;
+        float motor_max = 100;
+        int left_power = left_new_percent * motor_max;
+        int right_power = right_new_percent * motor_max;
+        LeftMotorF.spin(fwd,left_power,vex::velocityUnits::pct);
+        LeftMotorB.spin(fwd,left_power,vex::velocityUnits::pct);
+        RightMotorF.spin(fwd,right_power,vex::velocityUnits::pct);
+        RightMotorB.spin(fwd,right_power,vex::velocityUnits::pct);
 }
 int matchTimer() {
   // 128x64
@@ -480,7 +486,7 @@ driveBackward(75,convertDistance(70),1500);
 
 }
 void shuffleSortBlue(){ //This is for blue side autos
-  //Start sequence when lined up at the goal with 1 ball in vision position
+  //Start sequence when lined up at the goal with 1 ball in vision positionf
   
   scoreTop(scoreOne,scoreTopTime);
   int ballUp = 1100;
@@ -579,7 +585,7 @@ void blueAutoSecondOpposite(){
   int scoreOne = 1000;
 int scoreTopTime = 900;
 driveForward(75,convertDistance(70),1300);
-inertialLeft(75,Inertial17.heading()+126);
+inertialLeft(75,Inertial17.heading()-126);
 driveForwardIntake(75,convertDistance(70),1000);
 scoreTop(scoreOne,scoreTopTime);
 timeOuttake(100);
