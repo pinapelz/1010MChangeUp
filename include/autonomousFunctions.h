@@ -34,19 +34,19 @@ void brakeWheels(){
   RightMotorF.stop(brakeType::hold);
   RightMotorB.stop(brakeType::hold);
 }
-void cubeDrive(){
+void cubeDrive(int maxim, int multiplier){
         float max = 127.0;
-        float left_percent = Controller1.Axis1.value()+Controller1.Axis3.value()/max;
-        float right_percent = Controller1.Axis3.value()-Controller1.Axis1.value()/max;
-        float left_new_percent = left_percent * left_percent * left_percent;
-        float right_new_percent = right_percent * right_percent * right_percent;
+        float left_percent = Controller1.Axis3.value()/max;
+        float right_percent = Controller1.Axis1.value()/max;
+        float left_new_percent = 4*(pow(left_percent,3));
+        float right_new_percent = 4*(pow(right_percent,3));
         float motor_max = 100;
         int left_power = left_new_percent * motor_max;
         int right_power = right_new_percent * motor_max;
-        LeftMotorF.spin(fwd,left_power,vex::velocityUnits::pct);
-        LeftMotorB.spin(fwd,left_power,vex::velocityUnits::pct);
-        RightMotorF.spin(fwd,right_power,vex::velocityUnits::pct);
-        RightMotorB.spin(fwd,right_power,vex::velocityUnits::pct);
+        LeftMotorF.spin(fwd,left_power+right_power,vex::velocityUnits::pct);
+        LeftMotorB.spin(fwd,left_power+right_power,vex::velocityUnits::pct);
+        RightMotorF.spin(fwd,left_power-right_power,vex::velocityUnits::pct);
+        RightMotorB.spin(fwd,left_power-right_power,vex::velocityUnits::pct);
 }
 int matchTimer() {
   // 128x64
