@@ -521,6 +521,11 @@ stopAll();
 driveBackward(75,400,10000000);
 }
 
+//newly added autonomous function for skills planA
+void skillsA(){
+  
+}
+
 void redAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal
 int scoreOne = 1000;
 int scoreTopTime = 900;
