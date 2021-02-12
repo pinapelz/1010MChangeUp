@@ -17,6 +17,11 @@ int turntarget = 0;
 int intakeSpeed = 100;
 bool resetDriveEncoders = false;
 void sortBall(int n1, int n2);
+//constants for driveForwardA Function
+const float WHEEL_DIAMETER = 3.25; // inches
+const float WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * 3.1416;
+const float GEAR_RATIO = 1; // 0.5 turn of motor = 1 turn of wheel
+
 using namespace vex;
 void resetTarget() {
   ktarget = 0;
@@ -139,6 +144,63 @@ void driveForward(int speed, int rot, int time) { // Drive forward function that
   Elevator.stop();
   Elevator2.stop();
 }
+
+
+//simpler version of driveForward applied in skills planA, called driveForwardA :D
+//takes in 3 params, 
+//feet, an float value, for driving distance in ft, 
+//speed, an int value, for percent speed(50-60 recommended),
+//and action, an int value, for intake(1), outake(-1) or nothing(0)
+void driveForwardA( float feet, int speed, int action ) {
+    float inchesPerDegree = WHEEL_CIRCUMFERENCE / 360;
+    float degrees = feet * 12 / inchesPerDegree;
+    // startRotate doesn't wait for completion
+    // this way, the wheels can turn at same time
+    LeftMotorF.startRotateFor(
+        
+        degrees * GEAR_RATIO, vex::rotationUnits::deg, 
+        speed, vex::velocityUnits::pct
+    );
+    
+    LeftMotorB.startRotateFor(
+        
+        degrees * GEAR_RATIO, vex::rotationUnits::deg, 
+        speed, vex::velocityUnits::pct
+    );
+
+    RightMotorB.startRotateFor(
+        reverse,
+        degrees * GEAR_RATIO, vex::rotationUnits::deg,
+        speed, vex::velocityUnits::pct
+    );
+
+    RightMotorF.rotateFor(
+        reverse,
+        degrees * GEAR_RATIO, vex::rotationUnits::deg,
+        speed, vex::velocityUnits::pct
+    );
+
+    //the action will keep going while the robot is driving
+    while(RightMotorF.isSpinning()){
+    if(action==1){
+      //intake balls while driving
+      IntakeR.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
+      IntakeL.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
+    }else if(action==-1){
+      //outake(drop) balls while driving
+      Elevator.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct); 
+      Elevator2.spin(vex::directionType::rev, 127, vex::velocityUnits::pct); 
+    }else{
+      //do nothing
+    }
+    }
+
+}
+
+
+
+
+
 void driveForwardDrop(int speed, int rot, int time) { // Drive forward function that uses motor revrees
   LeftMotorF.setVelocity(speed, velocityUnits::pct);
   LeftMotorB.setVelocity(speed, velocityUnits::pct);
@@ -523,7 +585,8 @@ driveBackward(75,400,10000000);
 
 //newly added autonomous function for skills planA
 void skillsA(){
-  
+  //testing driveForwardA function
+  driveForwardA(1.5, 50, 1);
 }
 
 void redAutoSecondGoal(){ //This auto goes up to sorting the 2nd goal

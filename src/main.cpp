@@ -98,7 +98,8 @@ Blue autos are just what we did but with turning and colour sorting reversed
 
 If you need to change auto code go under autonomusFunctions.h and scroll to bottom
   */
-  redAuton();
+  //redAuton();
+  skillsA();
 }
 
 
