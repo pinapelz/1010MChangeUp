@@ -983,6 +983,8 @@ Discarded input sections
                 0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
  .rodata._ZN3vex3revE
                 0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+ .rodata._ZN3vex5PORT1E
+                0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
  .rodata._ZN3vex7monoXXLE
                 0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
  .rodata._ZN3vex7propXXLE
@@ -1088,8 +1090,6 @@ Discarded input sections
  .data._ZN3vex11rumbleShortE
                 0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
  .rodata._ZN3vex2mVE
-                0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
- .rodata._ZN3vex5PORT7E
                 0x00000000        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
  .rodata._ZN3vex23__sdk_cpp_version_minorE
                 0x00000000        0x1 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
@@ -3412,54 +3412,54 @@ Linker script and memory map
  .rodata._ZN3vex5PORT3E
                 0x03805440        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
                 0x03805440                vex::PORT3
- .rodata._ZN3vex5PORT1E
-                0x03805444        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805444                vex::PORT1
  .rodata._ZN3vex7reverseE
-                0x03805448        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805448                vex::reverse
+                0x03805444        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805444                vex::reverse
  .rodata._ZN3vex6PORT10E
-                0x0380544c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x0380544c                vex::PORT10
+                0x03805448        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805448                vex::PORT10
  .rodata._ZN3vex5PORT5E
-                0x03805450        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805450                vex::PORT5
+                0x0380544c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x0380544c                vex::PORT5
  .rodata._ZN3vex3pctE
-                0x03805454        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805454                vex::pct
+                0x03805450        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805450                vex::pct
  .rodata._ZN3vex4msecE
-                0x03805458        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805458                vex::msec
+                0x03805454        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805454                vex::msec
  .rodata._ZN3vex3rpmE
-                0x0380545c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x0380545c                vex::rpm
+                0x03805458        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805458                vex::rpm
  .rodata._ZN3vex5PORT6E
-                0x03805460        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805460                vex::PORT6
+                0x0380545c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x0380545c                vex::PORT6
  .rodata._ZN3vex7primaryE
-                0x03805464        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805464                vex::primary
+                0x03805460        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805460                vex::primary
  .rodata._ZN3vex3degE
-                0x03805468        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805468                vex::deg
+                0x03805464        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805464                vex::deg
  .rodata._ZN3vex6PORT15E
-                0x0380546c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x0380546c                vex::PORT15
+                0x03805468        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805468                vex::PORT15
  .rodata._ZN3vex6PORT19E
-                0x03805470        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805470                vex::PORT19
+                0x0380546c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x0380546c                vex::PORT19
  .rodata._ZN3vex7degreesE
-                0x03805474        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805474                vex::degrees
+                0x03805470        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805470                vex::degrees
  .rodata._ZN3vex6PORT22E
-                0x03805478        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805478                vex::PORT22
+                0x03805474        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805474                vex::PORT22
  .rodata._ZN3vex7partnerE
-                0x0380547c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x0380547c                vex::partner
+                0x03805478        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03805478                vex::partner
  .rodata._ZN3vex6PORT12E
+                0x0380547c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x0380547c                vex::PORT12
+ .rodata._ZN3vex5PORT7E
                 0x03805480        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03805480                vex::PORT12
+                0x03805480                vex::PORT7
  .rodata._ZN3vex8ratio6_1E
                 0x03805484        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode Pro V5\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
                 0x03805484                vex::ratio6_1

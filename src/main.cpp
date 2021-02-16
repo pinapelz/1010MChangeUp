@@ -7,6 +7,22 @@
 // LeftMotorB           motor         5               
 // Controller1          controller                    
 // IntakeR              motor         6               
+// IntakeL              motor         7               
+// Elevator2            motor         19              
+// Elevator             motor         20              
+// Inertial17           inertial      17              
+// Vision10             vision        10              
+// Controller2          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotorF           motor         15              
+// RightMotorB          motor         3               
+// RightMotorF          motor         12              
+// LeftMotorB           motor         5               
+// Controller1          controller                    
+// IntakeR              motor         6               
 // IntakeL              motor         1               
 // Elevator2            motor         19              
 // Elevator             motor         20              
@@ -111,6 +127,8 @@ void usercontrol(void) {
   //vex::task matchtime(matchTimer);
 
   int sortMode = 2;
+  int formulaMultiplier = 4;
+  int maxSpeed = 127;
   double driveMultiplier = 0.9;
   int deadband = 5;
   bool exponential = true;
@@ -145,7 +163,7 @@ void usercontrol(void) {
 
     }
      else {
-     cubeDrive(127,4);
+     cubeDrive(maxSpeed,formulaMultiplier);
       }
 
     
