@@ -48,6 +48,7 @@ void cubeDrive(int maxim, int multiplier){
         RightMotorF.spin(fwd,left_power-right_power,vex::velocityUnits::pct);
         RightMotorB.spin(fwd,left_power-right_power,vex::velocityUnits::pct);
 }
+
 int matchTimer() {
   // 128x64
   bool matchOver = false;
@@ -660,4 +661,35 @@ void pidTest(){
   vex::task::sleep(2000);
   resetTarget();
 
+}
+void dropBall(int time, int rot){
+    Elevator.setVelocity(127, velocityUnits::pct);
+  Elevator2.setVelocity(127, velocityUnits::pct);
+    Elevator.rotateFor(rot, rotationUnits::rev, false);
+  Elevator2.rotateFor(-rot, rotationUnits::rev, false);
+  vex::task::sleep(time);
+}
+void descoreBall(int rot, int time){
+  Elevator.setVelocity(127, velocityUnits::pct);
+  Elevator2.setVelocity(127, velocityUnits::pct);
+
+  Elevator.rotateFor(rot, rotationUnits::rev, false);
+  Elevator2.rotateFor(-rot, rotationUnits::rev, false);
+  vex::task::sleep(time);
+  stopAll();
+}
+void skillsRoute(){
+  driveForward(75,convertDistance(70),1300); 
+  inertialRight(75,126);
+  driveForward(100,convertDistance(85),1200); 
+  scoreTop(1000,900);
+  locateBallBlue();
+  descoreBall(4,700);
+  locateBallBlue();
+  descoreBall(4,700);
+  driveBackwardOuttake(75,800,1000);
+  
+
+  
+  
 }

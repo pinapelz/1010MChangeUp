@@ -1,59 +1,3 @@
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         7               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial17           inertial      17              
-// Vision10             vision        10              
-// Controller2          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         1               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial17           inertial      17              
-// Vision10             vision        10              
-// Controller2          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       main.cpp                                                  */
-/*    Author:       VEX                                                       */
-/*    Created:      Thu Sep 26 2019                                           */
-/*    Description:  Competition Template                                      */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15
-// RightMotorB          motor         3
-// RightMotorF          motor         12
-// LeftMotorB           motor         5
-// Controller1          controller
-// IntakeR              motor         6
-// IntakeL              motor         1
-// Elevator2            motor         19
-// Elevator             motor         20
-// Inertial17           inertial      17
-// Vision10             vision        10
-// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
 #include <iostream>
@@ -62,6 +6,7 @@ using namespace vex;
 void hasRedCallback();
 void ballLocated();
 void hasBlueCallback();
+void skillsRoute();
 void cubeDrive(int maxim, int multiplier);
 void stopAll();
 void intakeScore(int time, int rotation);
@@ -88,16 +33,12 @@ int matchTimer();
 void pidTest();
 void calibrateInertial();
 void intake(int time, int speed, int rotation);
-bool runPid = true;
 int speedometer();
 competition Competition;
 
 void pre_auton(void) { 
   vexcodeInit(); 
-  Brain.Screen.setFont(vex::fontType::mono60);
-  Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
-    calibrateInertial();
-    Brain.Screen.printAt(0, 40, "Calibration Complete!");
+
 }
 
 void autonomous(void) {
@@ -116,7 +57,11 @@ Blue autos are just what we did but with turning and colour sorting reversed
 
 If you need to change auto code go under autonomusFunctions.h and scroll to bottom
   */
-redAutoShuffleOpposite();
+    Brain.Screen.setFont(vex::fontType::mono60);
+  Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
+    calibrateInertial();
+    Brain.Screen.printAt(0, 40, "Calibration Complete!");
+skillsRoute();
 }
 
 
@@ -133,47 +78,11 @@ void usercontrol(void) {
   int deadband = 5;
   bool exponential = true;
   while (1) {
-    if (!exponential) {
-      int leftMotorSpeed =
-          (Controller1.Axis3.position() + Controller1.Axis1.position()) *
-          driveMultiplier;
-      int rightMotorSpeed =
-          (Controller1.Axis3.position() - Controller1.Axis1.position()) *
-          driveMultiplier;
-
-      if (abs(leftMotorSpeed) < deadband) {
-        LeftMotorF.setVelocity(0, pct);
-        LeftMotorB.setVelocity(0, pct);
-      } else {
-        LeftMotorF.setVelocity(leftMotorSpeed, pct);
-        LeftMotorB.setVelocity(leftMotorSpeed, pct);
-      }
-
-      if (abs(rightMotorSpeed) < deadband) {
-        RightMotorF.setVelocity(0, pct);
-        RightMotorB.setVelocity(0, pct);
-      } else {
-        RightMotorF.setVelocity(rightMotorSpeed, pct);
-        RightMotorB.setVelocity(rightMotorSpeed, pct);
-      }
-      LeftMotorF.spin(fwd);
-      LeftMotorB.spin(fwd);
-      RightMotorF.spin(fwd);
-      RightMotorB.spin(fwd);
-
-    }
-     else {
      cubeDrive(maxSpeed,formulaMultiplier);
-      }
 
-    
-    if (Controller1.ButtonUp.pressing()) {
-      driveMultiplier = 1.0;
-
-    } else if (Controller1.ButtonDown.pressing()) {
-      redAuton();
-    } 
-  
+    if(Controller1.ButtonDown.pressing()){
+        sortBall(1,2);
+    }
    if(partnerDrive){
     if (Controller2.ButtonY.pressing()) {
       //Ball Sorting: pass 1 for drop blue, score red and 2 for the opposite

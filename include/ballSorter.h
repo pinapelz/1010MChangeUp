@@ -40,9 +40,10 @@ void hasBlueCallback() {
 
   Vision10.takeSnapshot(Vision10__BLUEBALL); //Check for a blue ball
   if (Vision10.objectCount > 0) { //If there are more than one blue objects detected
+      Vision10.setLedColor(0,0,255);
       IntakeL.stop();
       IntakeR.stop();
-      releaseBall(500,3); //Drop the ball by a preset amount (3 rotations in 500 ms)
+      releaseBall(800,5); //Drop the ball by a preset amount (3 rotations in 500 ms)
       ballsProcessed++; //Increase balls processed
     Elevator2.stop();
   }
@@ -51,6 +52,7 @@ void hasBlueCallback() {
 
   if (Vision10.objectCount > 0) { //If there are more than oen red blue objects detected
           IntakeL.stop();
+          Vision10.setLedColor(255,0,0);
       IntakeR.stop();
       elevatorScore(800,5); //Score the ball by a preset amount (800,5)
       ballsProcessed++; //Increase the balls processed
@@ -74,7 +76,7 @@ void hasRedCallback() {
   if (Vision10.objectCount > 0) { //If there are more than one red balls
       IntakeL.stop();
       IntakeR.stop();
-      releaseBall(500,3); //Drop the red ball through the back
+      releaseBall(800,5); //Drop the red ball through the back
       ballsProcessed++; //Increase the number of balls processed
     Elevator2.stop();
   }
