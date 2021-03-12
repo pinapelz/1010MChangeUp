@@ -39,6 +39,7 @@ competition Competition;
 void pre_auton(void) { 
   vexcodeInit(); 
 
+
 }
 
 void autonomous(void) {
@@ -57,7 +58,7 @@ Blue autos are just what we did but with turning and colour sorting reversed
 
 If you need to change auto code go under autonomusFunctions.h and scroll to bottom
   */
-    Brain.Screen.setFont(vex::fontType::mono60);
+      Brain.Screen.setFont(vex::fontType::mono60);
   Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
     calibrateInertial();
     Brain.Screen.printAt(0, 40, "Calibration Complete!");
@@ -77,11 +78,16 @@ void usercontrol(void) {
   double driveMultiplier = 0.9;
   int deadband = 5;
   bool exponential = true;
+    LeftMotorB.stop(brakeType::coast);
+  LeftMotorF.stop(brakeType::coast);
+  RightMotorF.stop(brakeType::coast);
+  RightMotorB.stop(brakeType::coast);
   while (1) {
      cubeDrive(maxSpeed,formulaMultiplier);
 
     if(Controller1.ButtonDown.pressing()){
-        sortBall(1,2);
+          int ballUp = 850;
+elevatorScoreTwo(ballUp,720);
     }
    if(partnerDrive){
     if (Controller2.ButtonY.pressing()) {
