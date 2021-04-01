@@ -17,7 +17,7 @@ motor IntakeR = motor(PORT6, ratio18_1, true);
 motor IntakeL = motor(PORT7, ratio18_1, false);
 motor Elevator2 = motor(PORT19, ratio6_1, false);
 motor Elevator = motor(PORT20, ratio6_1, true);
-inertial Inertial17 = inertial(PORT17);
+inertial Inertial17 = inertial(PORT16);
 /*vex-vision-config:begin*/
 signature Vision10__REDBALL = signature (1, 6833, 9485, 8159, -619, 77, -271, 2.5, 0);
 signature Vision10__BLUEBALL = signature (2, -2731, -1927, -2329, 7117, 12463, 9790, 0.7, 0);

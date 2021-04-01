@@ -1,3 +1,67 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotorF           motor         15              
+// RightMotorB          motor         3               
+// RightMotorF          motor         12              
+// LeftMotorB           motor         5               
+// Controller1          controller                    
+// IntakeR              motor         6               
+// IntakeL              motor         7               
+// Elevator2            motor         19              
+// Elevator             motor         20              
+// Inertial17           inertial      16              
+// Vision10             vision        10              
+// Controller2          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotorF           motor         15              
+// RightMotorB          motor         3               
+// RightMotorF          motor         12              
+// LeftMotorB           motor         5               
+// Controller1          controller                    
+// IntakeR              motor         6               
+// IntakeL              motor         7               
+// Elevator2            motor         19              
+// Elevator             motor         20              
+// Inertial17           inertial      11              
+// Vision10             vision        10              
+// Controller2          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotorF           motor         15              
+// RightMotorB          motor         3               
+// RightMotorF          motor         12              
+// LeftMotorB           motor         5               
+// Controller1          controller                    
+// IntakeR              motor         6               
+// IntakeL              motor         7               
+// Elevator2            motor         19              
+// Elevator             motor         20              
+// Inertial17           inertial      11              
+// Vision10             vision        10              
+// Controller2          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// LeftMotorF           motor         15              
+// RightMotorB          motor         3               
+// RightMotorF          motor         12              
+// LeftMotorB           motor         5               
+// Controller1          controller                    
+// IntakeR              motor         6               
+// IntakeL              motor         7               
+// Elevator2            motor         19              
+// Elevator             motor         20              
+// Inertial11           inertial      11              
+// Vision10             vision        10              
+// Controller2          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
 #include <iostream>
@@ -86,8 +150,35 @@ void usercontrol(void) {
      cubeDrive(maxSpeed,formulaMultiplier);
 
     if(Controller1.ButtonDown.pressing()){
-          int ballUp = 850;
-elevatorScoreTwo(ballUp,720);
+   //skillsRoute();
+   driveBackwardOuttakeNoRoll(50, 700, 1200);
+  stopAll();
+  Inertial17.setHeading(90, deg);
+  inertialLeft(75, 63); // 333
+  driveBackwardOuttake(75, 600, 1000);
+  stopAll();
+  Inertial17.setHeading(90, deg);
+  inertialLeft(100, 23);
+  driveBackward(100, 1300, 2000);
+  driveForwardIntake(70, 2345, 3000);
+    Inertial17.setHeading(180, deg);
+  inertialLeft(100, 105);
+  driveForwardIntake(100, 900, 1400);
+  LeftMotorF.setVelocity(127, velocityUnits::pct);
+  LeftMotorB.setVelocity(127, velocityUnits::pct);
+  LeftMotorB.rotateFor(700, rotationUnits::deg, false);
+  LeftMotorF.rotateFor(700, rotationUnits::deg, false);
+  task::sleep(1000);
+  Inertial17.setHeading(90, deg);
+  inertialRight(100, 23);
+  driveBackward(70, 1345, 1300);
+  driveForwardIntake(100, 1250, 1600);
+
+
+
+
+
+
     }
    if(partnerDrive){
     if (Controller2.ButtonY.pressing()) {
