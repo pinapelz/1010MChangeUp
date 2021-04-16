@@ -1,67 +1,3 @@
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         7               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial17           inertial      16              
-// Vision10             vision        10              
-// Controller2          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         7               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial17           inertial      11              
-// Vision10             vision        10              
-// Controller2          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         7               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial17           inertial      11              
-// Vision10             vision        10              
-// Controller2          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// LeftMotorF           motor         15              
-// RightMotorB          motor         3               
-// RightMotorF          motor         12              
-// LeftMotorB           motor         5               
-// Controller1          controller                    
-// IntakeR              motor         6               
-// IntakeL              motor         7               
-// Elevator2            motor         19              
-// Elevator             motor         20              
-// Inertial11           inertial      11              
-// Vision10             vision        10              
-// Controller2          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "autonomousFunctions.h"
 #include "vex.h"
 #include <iostream>
@@ -126,10 +62,10 @@ If you need to change auto code go under autonomusFunctions.h and scroll to bott
   Brain.Screen.printAt(0, 40, "Calibrating Inertial...");
     calibrateInertial();
     Brain.Screen.printAt(0, 40, "Calibration Complete!");
-skillsRoute();
+skillsRouteB();
 }
 
-
+int deadband = 5;
 void usercontrol(void) {
   bool partnerDrive  = true;
   vex::task megaOof(speedometer);
@@ -142,39 +78,50 @@ void usercontrol(void) {
   double driveMultiplier = 0.9;
   int deadband = 5;
   bool exponential = true;
-    LeftMotorB.stop(brakeType::coast);
-  LeftMotorF.stop(brakeType::coast);
-  RightMotorF.stop(brakeType::coast);
-  RightMotorB.stop(brakeType::coast);
   while (1) {
-     cubeDrive(maxSpeed,formulaMultiplier);
+    // Get the velocity percentage of the left motor. (Axis3 + Axis1)
+    int leftMotorSpeed =
+        Controller1.Axis3.position() + Controller1.Axis1.position();
+    // Get the velocity percentage of the right motor. (Axis3 - Axis1)
+    int rightMotorSpeed =
+        Controller1.Axis3.position() - Controller1.Axis1.position();
+
+    // Set the speed of the left motor. If the value is less than the deadband,
+    // set it to zero.
+    if (abs(leftMotorSpeed) < deadband) {
+      // Set the speed to zero.
+      LeftMotorF.setVelocity(0, percent);
+      LeftMotorB.setVelocity(0, percent);
+    } else {
+      // Set the speed to leftMotorSpeed
+      LeftMotorF.setVelocity(leftMotorSpeed, percent);
+      LeftMotorB.setVelocity(leftMotorSpeed, percent);
+    }
+
+    // Set the speed of the right motor. If the value is less than the deadband,
+    // set it to zero.
+    if (abs(rightMotorSpeed) < deadband) {
+      // Set the speed to zero
+      RightMotorF.setVelocity(0, percent);
+      RightMotorB.setVelocity(0, percent);
+    } else {
+      // Set the speed to rightMotorSpeed
+      RightMotorF.setVelocity(rightMotorSpeed, percent);
+       RightMotorB.setVelocity(rightMotorSpeed, percent);
+    }
+
+    // Spin both motors in the forward direction.
+    LeftMotorF.spin(forward);
+    RightMotorF.spin(forward);
+        LeftMotorB.spin(forward);
+    RightMotorB.spin(forward);
 
     if(Controller1.ButtonDown.pressing()){
-   //skillsRoute();
-   driveBackwardOuttakeNoRoll(50, 700, 1200);
-  stopAll();
-  Inertial17.setHeading(90, deg);
-  inertialLeft(75, 63); // 333
-  driveBackwardOuttake(75, 600, 1000);
-  stopAll();
-  Inertial17.setHeading(90, deg);
-  inertialLeft(100, 23);
-  driveBackward(100, 1300, 2000);
-  driveForwardIntake(70, 2345, 3000);
-    Inertial17.setHeading(180, deg);
-  inertialLeft(100, 105);
-  driveForwardIntake(100, 900, 1400);
-  LeftMotorF.setVelocity(127, velocityUnits::pct);
-  LeftMotorB.setVelocity(127, velocityUnits::pct);
-  LeftMotorB.rotateFor(700, rotationUnits::deg, false);
-  LeftMotorF.rotateFor(700, rotationUnits::deg, false);
-  task::sleep(1000);
-  Inertial17.setHeading(90, deg);
-  inertialRight(100, 23);
-  driveBackward(70, 1345, 1300);
-  driveForwardIntake(100, 1250, 1600);
+
+redAutoShuffle();
 
 
+ 
 
 
 
@@ -237,8 +184,12 @@ void usercontrol(void) {
       IntakeR.spin(reverse, 100, pct);
 
     }
+    else{
+      IntakeL.stop();
+      IntakeR.stop();
+    }
 
-    else if (!Controller1.ButtonL1.pressing() &&
+    if (!Controller1.ButtonL1.pressing() &&
              !Controller1.ButtonL2.pressing() &&
              !Controller1.ButtonR2.pressing()) {
       IntakeL.stop();
