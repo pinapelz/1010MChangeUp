@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//Swap rightmotor B back to 3
+//leftmotorb back to 4
+//Elevator 2 back to 19
+//Vision 19
 
 double offset = 15.4;
 int JOYSTICK_DEADZONE = 5;
@@ -42,6 +46,67 @@ void cubeDrive() {
   LeftMotorB.spin(fwd, left_percent + right_percent, vex::velocityUnits::pct);
   RightMotorF.spin(fwd, left_percent - right_percent, vex::velocityUnits::pct);
   RightMotorB.spin(fwd, left_percent - right_percent, vex::velocityUnits::pct);
+}
+void expoDriveLeft(vex::directionType type, int percentage) {
+  if (percentage >= 0) {
+    percentage = 1.2 * pow(1.035, percentage) - 1.2 + 0.3 * percentage;
+  } else {
+    percentage = -percentage;
+    percentage = 1.2 * pow(1.035, percentage) - 1.2 + 0.3 * percentage;
+    percentage = -percentage;
+  }
+  LeftMotorF.spin(fwd, percentage, vex::velocityUnits::pct);
+  LeftMotorB.spin(fwd, percentage, vex::velocityUnits::pct);
+}
+void expoDriveRight(vex::directionType type, int percentage) {
+  if (percentage >= 0) {
+    percentage = 1.2 * pow(1.035, percentage) - 1.2 + 0.3 * percentage;
+  } else {
+    percentage = -percentage;
+    percentage = 1.2 * pow(1.035, percentage) - 1.2 + 0.3 * percentage;
+    percentage = -percentage;
+  }
+  RightMotorF.spin(fwd, percentage, vex::velocityUnits::pct);
+  RightMotorB.spin(fwd, percentage, vex::velocityUnits::pct);
+}
+void linearDrive() {
+  int deadband = 5;
+  // Get the velocity percentage of the left motor. (Axis3 + Axis1)
+  int leftMotorSpeed =
+      Controller1.Axis3.position() + Controller1.Axis1.position();
+  // Get the velocity percentage of the right motor. (Axis3 - Axis1)
+  int rightMotorSpeed =
+      Controller1.Axis3.position() - Controller1.Axis1.position();
+
+  // Set the speed of the left motor. If the value is less than the deadband,
+  // set it to zero.
+  if (abs(leftMotorSpeed) < deadband) {
+    // Set the speed to zero.
+    LeftMotorF.setVelocity(0, percent);
+    LeftMotorB.setVelocity(0, percent);
+  } else {
+    // Set the speed to leftMotorSpeed
+    LeftMotorF.setVelocity(leftMotorSpeed, percent);
+    LeftMotorB.setVelocity(leftMotorSpeed, percent);
+  }
+
+  // Set the speed of the right motor. If the value is less than the deadband,
+  // set it to zero.
+  if (abs(rightMotorSpeed) < deadband) {
+    // Set the speed to zero
+    RightMotorF.setVelocity(0, percent);
+    RightMotorB.setVelocity(0, percent);
+  } else {
+    // Set the speed to rightMotorSpeed
+    RightMotorF.setVelocity(rightMotorSpeed, percent);
+    RightMotorB.setVelocity(rightMotorSpeed, percent);
+  }
+
+  // Spin both motors in the forward direction.
+  LeftMotorF.spin(forward);
+  RightMotorF.spin(forward);
+  LeftMotorB.spin(forward);
+  RightMotorB.spin(forward);
 }
 
 int matchTimer() {
@@ -103,6 +168,10 @@ int speedometer() {
   while (true) {
     Brain.Screen.printAt(0, 40, "Elevator 1 RPM: %f", Elevator.velocity(rpm));
     Brain.Screen.printAt(0, 60, "Elevator 2 RPM: %f", Elevator2.velocity(rpm));
+        Brain.Screen.printAt(0, 80, "Left Motor F RPM: %f", LeftMotorF.velocity(rpm));
+    Brain.Screen.printAt(0, 100, "Left Motor B %f", LeftMotorB.velocity(rpm));
+            Brain.Screen.printAt(0, 120, "Right Motor F RPM: %f", RightMotorF.velocity(rpm));
+    Brain.Screen.printAt(0, 140, "Right Motor B %f", RightMotorB.velocity(rpm));
     Controller1.Screen.print("Inertial %f", Inertial17.heading(deg));
     Controller1.Screen.clearLine();
     task::sleep(500);
@@ -215,7 +284,7 @@ void driveBackwardOuttake(int speed, int rotation,
   IntakeR.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
   IntakeL.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
   Elevator2.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
-   Elevator.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
+  Elevator.spin(vex::directionType::rev, 127, vex::velocityUnits::pct);
 
   vex::task::sleep(time);
 }
@@ -365,10 +434,10 @@ void holdBall(int speed, int rotation, int time) {
 }
 
 void elevatorScoreTwo(int rotation, int time) {
-  Elevator.setVelocity(100, pct);
-  Elevator2.setVelocity(100, pct);
-  Elevator.rotateFor(rotation, rotationUnits::deg, false);
-  Elevator2.rotateFor(rotation, rotationUnits::deg, false);
+  Elevator.setVelocity(70, pct);
+  Elevator2.setVelocity(70, pct);
+  Elevator.rotateFor(-rotation, rotationUnits::deg, false);
+  Elevator2.rotateFor(-rotation, rotationUnits::deg, false);
   task::sleep(time);
   IntakeR.stop();
   IntakeL.stop();
@@ -380,8 +449,8 @@ void timeScore(int sec) {
   task::sleep(sec);
 }
 void scoreTop(int rotation, int time) {
-  Elevator2.setVelocity(85, pct);
-  Elevator2.rotateFor(rotation, rotationUnits::deg, false);
+  Elevator.setVelocity(85, pct);
+  Elevator.rotateFor(-rotation, rotationUnits::deg, false);
   task::sleep(time);
 }
 void timeIntake(int sec) {
@@ -406,13 +475,11 @@ void driveForwardDropBall(int speed, int rotation, int time) {
   RightMotorF.rotateFor(rotation, rotationUnits::deg, false);
   LeftMotorB.rotateFor(rotation, rotationUnits::deg, false);
   RightMotorB.rotateFor(rotation, rotationUnits::deg, false);
-    Elevator.rotateFor(rotation, rotationUnits::rev, false);
+  Elevator.rotateFor(rotation, rotationUnits::rev, false);
   Elevator2.rotateFor(-rotation, rotationUnits::rev, false);
-    IntakeR.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct);
+  IntakeR.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct);
   IntakeL.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct);
   task::sleep(time);
-
-
 }
 void resetEncoders() {
   LeftMotorF.resetPosition();
@@ -500,8 +567,8 @@ double convertDistance(double distance) { return distance * 11.1; }
 void locateBallRed() {
   seenBallRed = false;
   while (seenBallRed == false) {
-    Vision10.takeSnapshot(Vision10__REDBALL);
-    if (Vision10.objectCount > 0) {
+    Vision19.takeSnapshot(Vision19__REDBALL);
+    if (Vision19.objectCount > 0) {
       seenBallRed = true;
       break;
     }
@@ -515,8 +582,8 @@ void locateBallRed() {
 void locateBallBlue() {
   seenBallRed = false;
   while (seenBallRed == false) {
-    Vision10.takeSnapshot(Vision10__BLUEBALL);
-    if (Vision10.objectCount > 0) {
+    Vision19.takeSnapshot(Vision19__BLUEBALL);
+    if (Vision19.objectCount > 0) {
       seenBallRed = true;
       break;
     }
@@ -534,17 +601,21 @@ header file
 */
 void shuffleSortRed() { // This is for red side autos
   // Start sequence when lined up at the goal with 1 ball in vision position
+  timeIntake(200);
+  stopAll();
   scoreTop(scoreOne, scoreTopTime);
   int ballUp = 1000;
-  elevatorScoreTwo(ballUp,720); // Preset for bringing the ball up to the top but not scoring
+  elevatorScoreTwo(
+      ballUp,
+      720); // Preset for bringing the ball up to the top but not scoring
   locateBallRed();
-    stopAll();
+  stopAll();
   scoreTop(scoreOne, scoreTopTime);
   locateBallRed();
-    stopAll();
+  stopAll();
   elevatorScoreTwo(ballUp, 720);
   locateBallBlue();
-    stopAll();
+  stopAll();
   scoreTop(scoreOne, scoreTopTime);
   stopAll();
 }
@@ -567,29 +638,31 @@ void shuffleSortBlue() { // This is for blue side autos
 }
 
 void redAutoShuffle() { // Only shuffle sorting first goal
-  driveForward(65, convertDistance(75),1300);     // Speed,Distance (motor degrees), Time Allocated
-  inertialRight(75, Inertial17.heading()+126); // Speed, Heading Position
-  driveForwardIntake(75, convertDistance(70), 1000);
+  driveForward(65, convertDistance(75), 1300); // Speed,Distance (motor degrees), Time Allocated
+  Inertial17.setHeading(20,deg);
+  inertialRight(75, Inertial17.heading() + 136); // Speed, Heading Position
+  driveForwardIntake(60, convertDistance(70), 900);
   stopAll();
   shuffleSortRed();
   stopAll();
-  driveBackward(75, convertDistance(70), 1000);
-  Inertial17.setHeading(20,deg);
+  driveBackwardOuttake(75, convertDistance(70), 1000);
+  Inertial17.setHeading(20, deg);
   inertialRight(75, 163);
-  driveForwardDropBall(100, convertDistance(150), 1600);
+  driveForwardDropBall(70, convertDistance(90), 1200);
   inertialLeft(75, Inertial17.heading() - 75);
-  driveForwardIntake(100, convertDistance(53), 650);
+
+
+  //change the stuff below this 
+  driveForwardIntake(100, convertDistance(53), 800); 
   stopAll();
   timeIntake(100);
   locateBallRed();
-    Elevator.setVelocity(127, velocityUnits::pct);
+  Elevator.setVelocity(127, velocityUnits::pct);
   Elevator2.setVelocity(127, velocityUnits::pct);
   Elevator.rotateFor(2000, rotationUnits::deg, false);
   Elevator2.rotateFor(2000, rotationUnits::deg, false);
-  task::sleep(2000);
+  task::sleep(20000);//score indefinetly until time ends
 }
-
-
 
 void redAutoShuffleOpposite() { // Only shuffle sorting first goal
   driveForward(65, convertDistance(75),
@@ -756,13 +829,11 @@ void driveForwardDropBallIntake(int speed, int rotation, int time) {
   RightMotorF.rotateFor(rotation, rotationUnits::deg, false);
   LeftMotorB.rotateFor(rotation, rotationUnits::deg, false);
   RightMotorB.rotateFor(rotation, rotationUnits::deg, false);
-    Elevator.rotateFor(rotation, rotationUnits::rev, false);
+  Elevator.rotateFor(rotation, rotationUnits::rev, false);
   Elevator2.rotateFor(-rotation, rotationUnits::rev, false);
-    IntakeR.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct);
+  IntakeR.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct);
   IntakeL.spin(vex::directionType::fwd, 127, vex::velocityUnits::pct);
   task::sleep(time);
-
-
 }
 
 void descoreBall(int rot, int time) {
@@ -817,7 +888,7 @@ void skillsRouteB() {
   inertialLeft(100, 25);
   driveBackward(100, 1300, 2000);
   driveForwardIntake(70, 2345, 3000);
-    Inertial17.setHeading(90, deg);
+  Inertial17.setHeading(90, deg);
   inertialRight(100, 167);
   int ballUp = 700;
   elevatorScoreTwo(800, 800);
@@ -829,13 +900,13 @@ void skillsRouteB() {
   Elevator.rotateFor(2000, rotationUnits::deg, false);
   Elevator2.rotateFor(2000, rotationUnits::deg, false);
   task::sleep(1500);
-  driveBackward(50,400, 800);
+  driveBackward(50, 400, 800);
   driveBackwardOuttakeNoRoll(50, 300, 800);
-  Inertial17.setHeading(180,deg);
-  inertialLeft(75,110);
+  Inertial17.setHeading(180, deg);
+  inertialLeft(75, 110);
   driveForwardIntake(70, 1500, 2000);
   Inertial17.setHeading(90, deg);
-  inertialRight(100, 130); 
+  inertialRight(100, 130);
   driveForwardIntake(70, convertDistance(140), 1800);
   Elevator.setVelocity(127, velocityUnits::pct);
   Elevator2.setVelocity(127, velocityUnits::pct);
@@ -845,8 +916,8 @@ void skillsRouteB() {
   stopAll();
 
   driveBackwardOuttakeNoRoll(75, 1700, 2000);
-  Inertial17.setHeading(180,deg);
-  inertialLeft(75,64);
+  Inertial17.setHeading(180, deg);
+  inertialLeft(75, 64);
   driveBackward(100, 3000, 2000);
   driveForwardIntake(70, 2340, 3100);
   stopAll();
@@ -858,12 +929,12 @@ void skillsRouteB() {
   Elevator.rotateFor(2000, rotationUnits::deg, false);
   Elevator2.rotateFor(2000, rotationUnits::deg, false);
   task::sleep(2000);
-    driveBackwardOuttakeNoRoll(50, 500, 1100);
-  Inertial17.setHeading(180,deg);
-  inertialLeft(75,114);
+  driveBackwardOuttakeNoRoll(50, 500, 1100);
+  Inertial17.setHeading(180, deg);
+  inertialLeft(75, 114);
   driveForwardIntake(70, 1720, 2500);
   Inertial17.setHeading(90, deg);
-  inertialRight(100, 131); 
+  inertialRight(100, 131);
   driveForwardIntake(70, convertDistance(110), 1300);
   Elevator.setVelocity(127, velocityUnits::pct);
   Elevator2.setVelocity(127, velocityUnits::pct);
@@ -873,7 +944,7 @@ void skillsRouteB() {
 
   stopAll();
 
-   driveBackwardOuttakeNoRoll(50, 700, 1200);
+  driveBackwardOuttakeNoRoll(50, 700, 1200);
   stopAll();
   Inertial17.setHeading(90, deg);
   inertialLeft(75, 63); // 333
@@ -883,7 +954,7 @@ void skillsRouteB() {
   inertialLeft(100, 23);
   driveBackward(100, 1300, 2000);
   driveForwardIntake(70, 2345, 3000);
-    Inertial17.setHeading(180, deg);
+  Inertial17.setHeading(180, deg);
   inertialLeft(100, 95);
   driveForwardIntake(100, 1000, 1400);
   LeftMotorF.setVelocity(127, velocityUnits::pct);
@@ -893,12 +964,11 @@ void skillsRouteB() {
   task::sleep(1000);
   Inertial17.setHeading(90, deg);
   inertialRight(100, 23);
-    Elevator.setVelocity(127, velocityUnits::pct);
+  Elevator.setVelocity(127, velocityUnits::pct);
   Elevator2.setVelocity(127, velocityUnits::pct);
   Elevator.rotateFor(2000, rotationUnits::deg, false);
   Elevator2.rotateFor(2000, rotationUnits::deg, false);
   task::sleep(2000);
   driveBackward(70, 1345, 1300);
   driveForwardIntake(100, 1250, 1600);
-
 }

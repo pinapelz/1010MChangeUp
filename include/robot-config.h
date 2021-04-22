@@ -15,14 +15,14 @@ extern motor IntakeL;
 extern motor Elevator2;
 extern motor Elevator;
 extern inertial Inertial17;
-extern signature Vision10__REDBALL;
-extern signature Vision10__BLUEBALL;
-extern signature Vision10__HUMAN;
-extern signature Vision10__SIG_4;
-extern signature Vision10__SIG_5;
-extern signature Vision10__SIG_6;
-extern signature Vision10__SIG_7;
-extern vision Vision10;
+extern signature Vision19__REDBALL;
+extern signature Vision19__BLUEBALL;
+extern signature Vision19__HUMAN;
+extern signature Vision19__SIG_4;
+extern signature Vision19__SIG_5;
+extern signature Vision19__SIG_6;
+extern signature Vision19__SIG_7;
+extern vision Vision19;
 extern controller Controller2;
 
 /**

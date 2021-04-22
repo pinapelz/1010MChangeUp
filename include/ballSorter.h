@@ -38,9 +38,9 @@ void elevatorScore(int time, int revolution){
 }
 void hasBlueCallback() {
 
-  Vision10.takeSnapshot(Vision10__BLUEBALL); //Check for a blue ball
-  if (Vision10.objectCount > 0) { //If there are more than one blue objects detected
-      Vision10.setLedColor(0,0,255);
+  Vision19.takeSnapshot(Vision19__BLUEBALL); //Check for a blue ball
+  if (Vision19.objectCount > 0) { //If there are more than one blue objects detected
+      Vision19.setLedColor(0,0,255);
       IntakeL.stop();
       IntakeR.stop();
       releaseBall(800,5); //Drop the ball by a preset amount (3 rotations in 500 ms)
@@ -48,11 +48,11 @@ void hasBlueCallback() {
     Elevator2.stop();
   }
 
-  Vision10.takeSnapshot(Vision10__REDBALL); //Check for a red ball
+  Vision19.takeSnapshot(Vision19__REDBALL); //Check for a red ball
 
-  if (Vision10.objectCount > 0) { //If there are more than oen red blue objects detected
+  if (Vision19.objectCount > 0) { //If there are more than oen red blue objects detected
           IntakeL.stop();
-          Vision10.setLedColor(255,0,0);
+          Vision19.setLedColor(255,0,0);
       IntakeR.stop();
       elevatorScore(800,5); //Score the ball by a preset amount (800,5)
       ballsProcessed++; //Increase the balls processed
@@ -72,8 +72,8 @@ void hasBlueCallback() {
 
 
 void hasRedCallback() {
-  Vision10.takeSnapshot(Vision10__REDBALL); //Check for a red ball
-  if (Vision10.objectCount > 0) { //If there are more than one red balls
+  Vision19.takeSnapshot(Vision19__REDBALL); //Check for a red ball
+  if (Vision19.objectCount > 0) { //If there are more than one red balls
       IntakeL.stop();
       IntakeR.stop();
       releaseBall(800,5); //Drop the red ball through the back
@@ -81,9 +81,9 @@ void hasRedCallback() {
     Elevator2.stop();
   }
 
-  Vision10.takeSnapshot(Vision10__BLUEBALL); //Check for blue balsl
+  Vision19.takeSnapshot(Vision19__BLUEBALL); //Check for blue balsl
 
-  if (Vision10.objectCount > 0) { //If there are more than one blue balls detected
+  if (Vision19.objectCount > 0) { //If there are more than one blue balls detected
           IntakeL.stop();
       IntakeR.stop();
       elevatorScore(800,5); //Score the red ball by a preset amount (5 revolutions in 800 ms)
